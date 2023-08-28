@@ -1,0 +1,69 @@
+{
+  "name": "dental-management-front",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "lint": "run-script-os && lint-staged",
+    "lint:macos": "eslint './src/**/*.{ts,tsx}'",
+    "lint:win32": "eslint ./src/**/*.{ts,tsx}",
+    "lint-ts": "eslint .",
+    "lint-ts-fix": "eslint . --fix",
+    "lint-scss": "stylelint \"**/*.scss\"",
+    "lint-scss-fix": "stylelint \"**/*.scss\" --fix"
+  },
+  "dependencies": {
+    "@mantine/core": "^6.0.19",
+    "@mantine/dates": "^6.0.19",
+    "@tabler/icons-react": "^2.32.0",
+    "axios": "^1.5.0",
+    "commitlint": "^17.7.1",
+    "dayjs": "^1.11.9",
+    "dotenv": "^16.3.1",
+    "formik": "^2.4.3",
+    "husky": "^8.0.3",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.6.0",
+    "jwt-decode": "^3.1.2",
+    "lint-staged": "^14.0.1",
+    "react": "^18.2.0",
+    "react-data-grid": "^7.0.0-beta.37",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
+    "react-router-dom": "^6.15.0",
+    "run-script-os": "^1.1.6",
+    "sass": "^1.66.1",
+    "stylelint": "^15.10.3",
+    "stylelint-config-standard": "^34.0.0",
+    "vite-tsconfig-paths": "^4.2.0",
+    "yup": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,html,css,scss}": [
+      "prettier --write --ignore-unknown"
+    ]
+  }
+}
