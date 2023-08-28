@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--mantine-color-primary);
 
   &__wrapper {
     width: 100%;
@@ -12,6 +13,10 @@
     padding: 20px;
     border-radius: 5px;
     margin: 20px 0;
+
+    &--dark {
+      background-color: var(--mantine-color-dark-5);
+    }
   }
 
   &__title {
