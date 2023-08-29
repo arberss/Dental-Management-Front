@@ -1,4 +1,5 @@
 import Outside from '@/shared-components/OutsideWrapper/Outside';
+import { Text, useMantineColorScheme } from '@mantine/core';
 import DataGrid from 'react-data-grid';
 import 'react-data-grid/lib/styles.css';
 import Pagination from '../Pagination/Pagination';
@@ -47,6 +48,8 @@ const Table = ({
   style,
   onOutsideClick,
 }: TableProps) => {
+  const { colorScheme } = useMantineColorScheme();
+
   let customColumns = [...columns];
 
   if (actions) {
@@ -75,11 +78,23 @@ const Table = ({
   const gridElement = (
     <DataGrid
       style={style}
-      className='rdg-light tableGrid'
+      className={`${
+        colorScheme === 'dark' ? 'rdg-dark' : 'rdg-light'
+      } tableGrid`}
       columns={customColumns}
       rows={rows}
-      onRowDoubleClick={onRowDoubleClick}
-      onRowClick={onRowClick}
+      onCellDoubleClick={onRowDoubleClick}
+      onCellClick={onRowClick}
+      renderers={{
+        noRowsFallback: (
+          <Text
+            sx={{ padding: '10px', textAlign: 'center', gridColumn: '1/-1' }}
+            size='md'
+          >
+            There is no data
+          </Text>
+        ),
+      }}
       bottomSummaryRows={bottomRows}
       rowHeight={45}
     />

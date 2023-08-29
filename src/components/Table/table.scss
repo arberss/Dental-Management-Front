@@ -34,4 +34,13 @@
     align-items: center;
     padding: 0px 5px;
   }
+
+  &--dark {
+    background-color: var(--mantine-color-dark-4);
+
+    .rdg-cell {
+      background-color: var(--mantine-color-dark-4);
+      color: var(--mantine-color-gray-0);
+    }
+  }
 }

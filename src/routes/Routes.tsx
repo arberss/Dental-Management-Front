@@ -1,5 +1,6 @@
 import Login from '@/pages/Auth/Login/Login';
 import Dashboard from '@/pages/Dashboard/Dashboard';
+import Patients from '@/pages/Patients';
 import { decodeToken } from '@/utils/decodeToken';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -17,7 +18,7 @@ const RoutesComponent = () => {
           </ProtectedRoute>
         }
       >
-        {/* <Route path='payments' element={<Payments />} /> */}
+        <Route path='patients' element={<Patients />} />
       </Route>
 
       {!decodedToken && (

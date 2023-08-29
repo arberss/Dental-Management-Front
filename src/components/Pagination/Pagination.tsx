@@ -1,5 +1,9 @@
 import Select from '@/shared-components/Form/Select/Select';
-import { Flex, Pagination as MantinePagination } from '@mantine/core';
+import {
+  Flex,
+  Pagination as MantinePagination,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { calculatePages, sizeFilter } from './helper';
 import './pagination.scss';
 
@@ -20,6 +24,8 @@ const Pagination = ({
 }: PaginationProps) => {
   if (!totalPages) return null;
 
+  const { colorScheme } = useMantineColorScheme();
+
   const activePageList = [...sizeFilter];
 
   if (totalPages > +sizeFilter[sizeFilter.length - 1].value) {
@@ -30,7 +36,17 @@ const Pagination = ({
   }
 
   return (
-    <Flex className='pagination'>
+    <Flex
+      className={`${
+        colorScheme === 'light' ? 'pagination' : 'pagination pagination--dark'
+      }`}
+      sx={(theme) => ({
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? theme.colors.dark[4]
+            : theme.colors.gray[0],
+      })}
+    >
       <Select
         name='size'
         data={activePageList}
@@ -40,7 +56,7 @@ const Pagination = ({
       />
       <MantinePagination
         total={calculatePages(totalPages, size ?? 1)}
-        page={Number(activePage)}
+        value={Number(activePage)}
         boundaries={1}
         siblings={1}
         onChange={onChange}

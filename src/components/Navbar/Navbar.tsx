@@ -34,9 +34,14 @@ const Navbar = ({ isOpen }: NavbarProps) => {
       hiddenBreakpoint='md'
       hidden={!isOpen}
       width={{ md: 250 }}
+      sx={(theme) => ({
+        [theme.fn.smallerThan('md')]: {
+          width: 300,
+        },
+      })}
     >
       <MantineNavbar.Section>
-        <NavbarHeader />
+        <NavbarHeader title='Dental Management' />
       </MantineNavbar.Section>
       <MantineNavbar.Section grow mt='md'>
         <MainLinks linkData={linkData} />

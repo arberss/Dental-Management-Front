@@ -1,19 +1,19 @@
-import { DefaultMantineColor, Divider, Text } from '@mantine/core';
+import { Box, DefaultMantineColor, Divider, Text } from '@mantine/core';
 
 interface NavbarHeaderProps {
   title?: string;
   color?: DefaultMantineColor;
 }
 
-const NavbarHeader = ({
-  title = '',
-  color = 'gray',
-}: NavbarHeaderProps) => {
+const NavbarHeader = ({ title = '', color = '' }: NavbarHeaderProps) => {
   return (
-    <>
-      <Text color={color}>{title}</Text>
+    <Box
+    >
+      <Text color={color} sx={{ padding: '5.5px 10px', textAlign: 'center' }}>
+        {title}
+      </Text>
       <Divider my='sm' />
-    </>
+    </Box>
   );
 };
 

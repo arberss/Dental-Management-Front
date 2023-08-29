@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 import * as dayjs from 'dayjs'
 
 export const decodeToken = (): { [key: string]: any } | null => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('dental-token');
   if (token === null) return null;
 
   const decoded: { [key: string]: any } | null = jwt_decode(token);
