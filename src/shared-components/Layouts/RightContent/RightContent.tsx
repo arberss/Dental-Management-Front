@@ -5,15 +5,7 @@ interface RightContentProps {
 }
 
 const RightContent = ({ children }: RightContentProps) => {
-  return (
-    <Box
-      sx={{
-        padding: '20px 0',
-      }}
-    >
-      {children}
-    </Box>
-  );
+  return <Box pt='xs'>{children}</Box>;
 };
 
 export default RightContent;

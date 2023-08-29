@@ -19,14 +19,18 @@ function MainLink({ icon, color, label, to, onClick }: MainLinkProps) {
           width: '100%',
           padding: theme.spacing.xs,
           borderRadius: theme.radius.sm,
+          backgroundColor:
+            theme.colorScheme === 'dark'
+              ? 'rgba(165, 216, 255, 0.1)'
+              : 'rgba(165, 216, 255, 0.3)',
           color:
             theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
           '&:hover': {
             backgroundColor:
               theme.colorScheme === 'dark'
-                ? theme.colors.dark[6]
-                : 'rgba(165, 216, 255, 0.1)',
+                ? 'rgba(165, 216, 255, 0.05)'
+                : 'rgba(165, 216, 255, 0.5)',
           },
         })}
         onClick={onClick}

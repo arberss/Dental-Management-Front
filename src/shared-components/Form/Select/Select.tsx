@@ -11,6 +11,7 @@ interface SelectProps {
   error?: string;
   searchable?: boolean;
   disabled?: boolean;
+  dropdownPosition: 'bottom' | 'top' | 'flip' | undefined;
   sx?: Sx;
 }
 
@@ -26,6 +27,7 @@ const Select = ({
   defaultValue,
   disabled,
   sx,
+  dropdownPosition,
 }: SelectProps) => {
   return (
     <MantineSelect
@@ -40,6 +42,7 @@ const Select = ({
       searchable={searchable}
       disabled={disabled}
       sx={sx}
+      dropdownPosition={dropdownPosition}
     />
   );
 };

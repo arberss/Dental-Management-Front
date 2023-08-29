@@ -3,3 +3,18 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.overflowHoverVisibility:active::-webkit-scrollbar-thumb,
+.overflowHoverVisibility:focus::-webkit-scrollbar-thumb,
+.overflowHoverVisibility:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+.overflowHoverVisibility::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  visibility: hidden;
+}
+
+.overflowHoverVisibility::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}

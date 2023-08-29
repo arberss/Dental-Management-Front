@@ -1,4 +1,5 @@
-import { Box, DefaultMantineColor, Divider, Text } from '@mantine/core';
+import ColorSchemeMode from '@/shared-components/ColorSchemeMode/ColorSchemeMode';
+import { Box, DefaultMantineColor, Divider, Flex, Text } from '@mantine/core';
 
 interface NavbarHeaderProps {
   title?: string;
@@ -7,12 +8,12 @@ interface NavbarHeaderProps {
 
 const NavbarHeader = ({ title = '', color = '' }: NavbarHeaderProps) => {
   return (
-    <Box
-    >
-      <Text color={color} sx={{ padding: '5.5px 10px', textAlign: 'center' }}>
-        {title}
-      </Text>
-      <Divider my='sm' />
+    <Box>
+      <Flex justify='space-between' align='center' p='md'>
+        <Text color={color}>{title}</Text>
+        <ColorSchemeMode />
+      </Flex>
+      <Divider p='0' />
     </Box>
   );
 };
