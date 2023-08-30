@@ -5,13 +5,14 @@ import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import { endpoints } from '@/config/endpoints';
 import { usePagination } from '@/hooks/react-query/usePagination';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { columns } from './helper';
 import { IPatientsResponse } from './index.interface';
 import { IconUsers } from '@tabler/icons-react';
 import { Flex } from '@mantine/core';
 import { useQuery } from '@/hooks/react-query/useQuery';
 import AddPatient from './Create/AddPatient';
+import Input from '@/shared-components/Form/Input/Input';
 
 const Patients = () => {
   const [paginations, setPaginations] = useState({
@@ -19,6 +20,7 @@ const Patients = () => {
     size: 10,
     totalPages: 10,
   });
+  const [searchPatient, setSearchPatient] = useState('');
   const [addPatientDrawerOpened, setAddPatientDrawerOpened] = useState(false);
 
   const { data, isLoading } = usePagination<{
@@ -26,17 +28,18 @@ const Patients = () => {
   }>(endpoints.patients, {
     page: paginations.page,
     size: paginations.size,
+    search: searchPatient,
   });
 
   const {
     data: statsData = {
       totalPatients: 0,
-      totalTodayPatients: 0,
+      totalTodayTreatments: 0,
     },
     isLoading: statsLoading,
   } = useQuery<{
     totalPatients: number;
-    totalTodayPatients: number;
+    totalTodayTreatments: number;
   }>(endpoints.patientsStats);
 
   const tableOptions: TableProps['options'] = {
@@ -67,9 +70,17 @@ const Patients = () => {
     {
       icon: <IconUsers size='35px' color='green' />,
       title: 'Today',
-      value: statsData?.totalTodayPatients,
+      value: statsData?.totalTodayTreatments,
     },
   ];
+
+  const handlePatientModalClose = () => {
+    setAddPatientDrawerOpened(false);
+  };
+
+  const handleSearchPatient = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchPatient(e.target.value);
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -91,10 +102,18 @@ const Patients = () => {
               );
             })}
           </Flex>
-          <TableTopActions
-            title='Add Patient'
-            onClick={() => setAddPatientDrawerOpened(true)}
-          />
+          <Flex justify='space-between' align='center'>
+            <Input
+              name='patientSearch'
+              value={searchPatient}
+              onChange={handleSearchPatient}
+              placeholder='Search'
+            />
+            <TableTopActions
+              title='Add Patient'
+              onClick={() => setAddPatientDrawerOpened(true)}
+            />
+          </Flex>
           <Table
             columns={columns}
             rows={data?.items ?? []}
@@ -104,7 +123,7 @@ const Patients = () => {
       </RightContent>
       <AddPatient
         opened={addPatientDrawerOpened}
-        onClose={() => setAddPatientDrawerOpened(false)}
+        onClose={handlePatientModalClose}
         title='Add Patient'
       />
     </>

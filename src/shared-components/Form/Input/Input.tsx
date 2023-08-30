@@ -9,7 +9,7 @@ interface InputProps {
   icon?: string;
   error?: string;
   space?: number;
-  onChange: (event?: React.ChangeEvent) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: any;
   defaultValue?: string;
   type?: string;
@@ -28,7 +28,7 @@ const Input = (props: InputProps) => {
     value,
     type = 'text',
     defaultValue,
-    sx
+    sx,
   } = props;
 
   return (

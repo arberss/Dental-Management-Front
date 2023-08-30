@@ -4,4 +4,5 @@ export const endpoints = {
   patients: 'patient/patients',
   patientsStats: 'patient/stats',
   doctors: 'user/doctors',
+  addPatientTreatment: 'patient/addPatientTreatment',
 };
