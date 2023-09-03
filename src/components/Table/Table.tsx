@@ -11,7 +11,7 @@ export type columnRowType = { [key: string]: any };
 
 export interface TableProps {
   columns: { key: string; name: string }[];
-  rows: { key: string; [key: string]: string | number | undefined }[];
+  rows: { [key: string]: any }[];
   onRowClick?: (column: columnRowType, row: columnRowType) => void;
   onRowDoubleClick?: (column: columnRowType, row: columnRowType) => void;
   exports?: { pdf?: boolean; excel?: boolean; csv?: boolean };

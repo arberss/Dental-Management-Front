@@ -1,6 +1,5 @@
 import TableSelectedColumn from '@/components/Table/components/TableSelectedColumn/TableSelectedColumn';
 import { columnRowType } from '@/components/Table/Table';
-import { Text } from '@mantine/core';
 
 export const columns = [
   {

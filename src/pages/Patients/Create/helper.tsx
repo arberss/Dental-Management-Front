@@ -1,21 +1,21 @@
 import * as Yup from 'yup';
 
 export const validationSchema = Yup.object({
-  firstName: Yup.string().required(''),
-  parentName: Yup.string().required(''),
-  lastName: Yup.string().required(''),
-  dateOfBirth: Yup.string().required(''),
-  contactNumber: Yup.string().required(''),
+  firstName: Yup.string().required('First Name is required'),
+  parentName: Yup.string().required('Parent Name is required'),
+  lastName: Yup.string().required('Last Name'),
+  dateOfBirth: Yup.string().required('Date of Birth is required'),
+  contactNumber: Yup.string().required('Contact Number is required'),
   address: Yup.object({
-    street: Yup.string().required(''),
-    city: Yup.string().required(''),
-    state: Yup.string().required(''),
-    postalCode: Yup.string().required(''),
+    street: Yup.string().required('Street is required'),
+    city: Yup.string().required('City is required'),
+    state: Yup.string().required('State is required'),
+    postalCode: Yup.string().required('Postal Code is required'),
   }),
   treatment: Yup.object({
-    name: Yup.string().required(''),
-    description: Yup.string().required(''),
-    price: Yup.string().required(''),
-    doctor: Yup.string().required(''),
+    name: Yup.string().required('Treatment Name is required'),
+    description: Yup.string().required('Treatment Description is required'),
+    price: Yup.string().required('Treatment Price is required'),
+    doctor: Yup.string().required('Doctor is required'),
   }),
 });

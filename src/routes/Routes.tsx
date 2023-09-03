@@ -1,6 +1,7 @@
 import Login from '@/pages/Auth/Login/Login';
 import Dashboard from '@/pages/Dashboard/Dashboard';
-import Patients from '@/pages/Patients';
+import Patient from '@/pages/Patient/Patient';
+import Patients from '@/pages/Patients/Patients';
 import { decodeToken } from '@/utils/decodeToken';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -19,6 +20,7 @@ const RoutesComponent = () => {
         }
       >
         <Route path='patients' element={<Patients />} />
+        <Route path='patient/:patientId' element={<Patient />} />
       </Route>
 
       {!decodedToken && (

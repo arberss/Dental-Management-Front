@@ -83,8 +83,6 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
     resetForm();
   };
 
-  console.log('values', values);
-
   return (
     <Drawer
       opened={opened}
@@ -277,7 +275,7 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
               </Grid.Col>
             </Grid>
           </Box>
-          <Flex align='center' justify='flex-end' columnGap='md'>
+          <Flex align='center' justify='flex-end' columnGap='md' mt='xs'>
             <Button
               bg='dark.3'
               sx={(theme) => ({
@@ -285,6 +283,7 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
                   backgroundColor: theme.colors.dark[4],
                 },
               })}
+              onClick={handleClose}
             >
               Cancel
             </Button>
