@@ -15,7 +15,7 @@ const Card = ({ icon, title, value }: CardProps) => {
       withBorder
       w='fit-content'
       sx={(theme) => ({
-        minWidth: '200px',
+        minWidth: '220px',
         [theme.fn.smallerThan('sm')]: {
           minWidth: 'unset',
           display: 'flex',

@@ -42,7 +42,7 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
   const initialValues: IAddPatientTreatment = {
     name: '',
     description: '',
-    price: 0,
+    price: undefined,
     doctor: '',
   };
 
@@ -64,6 +64,7 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
                   params?.patientId ?? ''
                 )
               );
+              queryClient.invalidateQueries(endpoints.patientsStats);
               handleClose();
               formikHelpers.resetForm();
             },
@@ -162,7 +163,12 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
             >
               Cancel
             </Button>
-            <Button bg='blue.8' type='submit'>
+            <Button
+              bg='blue.8'
+              type='submit'
+              disabled={putMutation.isLoading}
+              loading={putMutation.isLoading}
+            >
               Create
             </Button>
           </Flex>

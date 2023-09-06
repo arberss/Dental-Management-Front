@@ -3,7 +3,7 @@ export interface IPatient {
   firstName: string;
   parentName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   contactNumber: string;
   address: {
     street: string;

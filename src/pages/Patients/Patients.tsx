@@ -1,6 +1,6 @@
 import Card from '@/components/Card/Card';
 import Loader from '@/components/Loader/Loader';
-import Table, { columnRowType, TableProps } from '@/components/Table/Table';
+import Table, { TableProps } from '@/components/Table/Table';
 import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import { endpoints } from '@/config/endpoints';
 import { usePagination } from '@/hooks/react-query/usePagination';
@@ -14,6 +14,7 @@ import AddPatient from './Create/AddPatient';
 import Input from '@/shared-components/Form/Input/Input';
 import { useNavigate } from 'react-router-dom';
 import { IPatient } from '../Patient/index.interface';
+import { Actions } from '@/components/Table/actions/TableActions';
 
 const Patients = () => {
   const navigate = useNavigate();
@@ -25,6 +26,9 @@ const Patients = () => {
   });
   const [searchPatient, setSearchPatient] = useState('');
   const [addPatientDrawerOpened, setAddPatientDrawerOpened] = useState(false);
+  const [selectedEditUser, setSelectedEditUser] = useState<{
+    [key: string]: any;
+  } | null>(null);
 
   const { data, isLoading } = usePagination<{
     items: IPatient[];
@@ -49,6 +53,7 @@ const Patients = () => {
     actionColumn: {
       frozen: true,
       position: 'left',
+      width: 150,
     },
     pagination: {
       activePage: paginations.page,
@@ -63,9 +68,19 @@ const Patients = () => {
     },
   };
 
-  const onRowClick = (data: columnRowType) => {
-    navigate(`/patient/${data.row._id}`);
-  };
+  const tableActions = [
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'view',
+      text: 'Details',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.indigo[5],
+        color: theme.colors.gray[1],
+      }),
+      action: (): void => {
+        navigate(`/patient/${rowData?._id}`);
+      },
+    }),
+  ];
 
   const cards = [
     {
@@ -75,13 +90,14 @@ const Patients = () => {
     },
     {
       icon: <IconUsers size='35px' color='green' />,
-      title: 'Today',
+      title: 'Treatments Today',
       value: statsData?.totalTodayTreatments,
     },
   ];
 
   const handlePatientModalClose = () => {
     setAddPatientDrawerOpened(false);
+    setSelectedEditUser(null);
   };
 
   const handleSearchPatient = (e: ChangeEvent<HTMLInputElement>) => {
@@ -124,14 +140,14 @@ const Patients = () => {
             columns={columns}
             rows={data?.items ?? []}
             options={tableOptions}
-            onRowClick={onRowClick}
+            actions={tableActions}
           />
         </>
       </RightContent>
       <AddPatient
         opened={addPatientDrawerOpened}
         onClose={handlePatientModalClose}
-        title='Add Patient'
+        title={selectedEditUser ? 'Edit Patient' : 'Add Patient'}
       />
     </>
   );

@@ -1,26 +1,37 @@
 import { endpoints } from '@/config/endpoints';
 import { usePutMutation } from '@/hooks/react-query/useMutation';
 import { usePagination } from '@/hooks/react-query/usePagination';
+import { IPatient } from '@/pages/Patient/index.interface';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
 import Select from '@/shared-components/Form/Select/Select';
 import { Box, Button, Drawer, Flex, Grid, Text } from '@mantine/core';
 import { DatePickerInput, DateValue } from '@mantine/dates';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { ChangeEvent } from 'react';
 import { useQueryClient } from 'react-query';
-import { validationSchema } from './helper';
-import { IAddPationFields } from './index.interface';
+import {
+  addPatientInitialValues,
+  validationEditSchema,
+  validationSchema,
+} from './helper';
 
 interface AddPatientProps {
   opened: boolean;
   onClose: () => void;
   title: string;
+  selectedEditUser?: IPatient;
 }
 
-const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
+const AddPatient = ({
+  opened,
+  onClose,
+  title,
+  selectedEditUser,
+}: AddPatientProps) => {
   const queryClient = useQueryClient();
+  const editMode = !!selectedEditUser;
 
   const { data: doctors } = usePagination<{
     items: { _id: string; firstName: string; lastName: string }[];
@@ -38,40 +49,43 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
     }) ?? [];
 
   const putMutation = usePutMutation(endpoints.addPatientTreatment);
+  const putUpdateMutation = usePutMutation(endpoints.updatePatient);
 
-  const initialValues: IAddPationFields = {
-    firstName: '',
-    parentName: '',
-    lastName: '',
-    dateOfBirth: dayjs().toDate(),
-    contactNumber: '',
-    address: {
-      street: '',
-      city: '',
-      state: '',
-      postalCode: '',
-    },
-    treatment: {
-      name: '',
-      description: '',
-      price: 0,
-      doctor: '',
-    },
-  };
+  const initialValues = editMode ? selectedEditUser : addPatientInitialValues;
 
   const { values, setFieldValue, resetForm, errors, handleSubmit } = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: editMode ? validationEditSchema : validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values, formikHelpers) => {
       try {
-        putMutation.mutate(values, {
-          onSuccess() {
-            queryClient.invalidateQueries(endpoints.patients);
-            queryClient.invalidateQueries(endpoints.patientsStats);
-            handleClose();
-            formikHelpers.resetForm();
-          },
-        });
+        if (editMode) {
+          putUpdateMutation.mutate(
+            { ...values, id: selectedEditUser._id },
+            {
+              onSuccess() {
+                queryClient.invalidateQueries(endpoints.patients);
+                queryClient.invalidateQueries(
+                  endpoints.patient.replace(
+                    '::patientId',
+                    selectedEditUser?._id ?? ''
+                  )
+                );
+                handleClose();
+                formikHelpers.resetForm();
+              },
+            }
+          );
+        } else {
+          putMutation.mutate(values, {
+            onSuccess() {
+              queryClient.invalidateQueries(endpoints.patients);
+              queryClient.invalidateQueries(endpoints.patientsStats);
+              handleClose();
+              formikHelpers.resetForm();
+            },
+          });
+        }
       } catch (error) {
         return error;
       }
@@ -162,7 +176,7 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
                   onChange={(value: DateValue) =>
                     setFieldValue('dateOfBirth', value)
                   }
-                  value={values.dateOfBirth}
+                  value={dayjs(values.dateOfBirth).toDate() ?? dayjs().toDate()}
                   valueFormat='DD MMMM YYYY'
                 />
               </Grid.Col>
@@ -220,60 +234,64 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
               </Grid.Col>
             </Grid>
 
-            <Text size='md' pt='md' weight='bold' color='blue.5'>
-              Treatment
-            </Text>
-            <Grid gutter='sm' py='4px'>
-              <Grid.Col span={6}>
-                <Input
-                  name='treatment.name'
-                  label='Treatment name'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setFieldValue('treatment.name', e.target.value)
-                  }
-                  value={values.treatment.name}
-                  error={errors?.treatment?.name}
-                />
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <Input
-                  name='treatment.description'
-                  label='Description'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setFieldValue('treatment.description', e.target.value)
-                  }
-                  value={values.treatment.description}
-                  error={errors?.treatment?.description}
-                />
-              </Grid.Col>
-            </Grid>
-            <Grid gutter='sm' py='4px'>
-              <Grid.Col span={6}>
-                <NumberInput
-                  name='treatment.price'
-                  label='Price'
-                  onChange={(value: number) =>
-                    setFieldValue('treatment.price', value)
-                  }
-                  value={values.treatment.price}
-                  error={errors?.treatment?.price}
-                />
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <Select
-                  name='treatment.doctor'
-                  data={selectDoctorsData}
-                  label='Doctor'
-                  onChange={(value: string) =>
-                    setFieldValue('treatment.doctor', value)
-                  }
-                  value={values.treatment.doctor}
-                  searchable={true}
-                  dropdownPosition='bottom'
-                  error={errors?.treatment?.doctor}
-                />
-              </Grid.Col>
-            </Grid>
+            {!editMode && (
+              <>
+                <Text size='md' pt='md' weight='bold' color='blue.5'>
+                  Treatment
+                </Text>
+                <Grid gutter='sm' py='4px'>
+                  <Grid.Col span={6}>
+                    <Input
+                      name='treatment.name'
+                      label='Treatment name'
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setFieldValue('treatment.name', e.target.value)
+                      }
+                      value={values?.treatment?.name}
+                      error={errors?.treatment?.name}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Input
+                      name='treatment.description'
+                      label='Description'
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setFieldValue('treatment.description', e.target.value)
+                      }
+                      value={values?.treatment?.description}
+                      error={errors?.treatment?.description}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Grid gutter='sm' py='4px'>
+                  <Grid.Col span={6}>
+                    <NumberInput
+                      name='treatment.price'
+                      label='Price'
+                      onChange={(value: number) =>
+                        setFieldValue('treatment.price', value)
+                      }
+                      value={values?.treatment?.price}
+                      error={errors?.treatment?.price}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Select
+                      name='treatment.doctor'
+                      data={selectDoctorsData}
+                      label='Doctor'
+                      onChange={(value: string) =>
+                        setFieldValue('treatment.doctor', value)
+                      }
+                      value={values?.treatment?.doctor}
+                      searchable={true}
+                      dropdownPosition='bottom'
+                      error={errors?.treatment?.doctor}
+                    />
+                  </Grid.Col>
+                </Grid>
+              </>
+            )}
           </Box>
           <Flex align='center' justify='flex-end' columnGap='md' mt='xs'>
             <Button
@@ -287,8 +305,13 @@ const AddPatient = ({ opened, onClose, title }: AddPatientProps) => {
             >
               Cancel
             </Button>
-            <Button bg='blue.8' type='submit'>
-              Create
+            <Button
+              bg='blue.8'
+              type='submit'
+              disabled={putMutation.isLoading || putUpdateMutation.isLoading}
+              loading={putMutation.isLoading || putUpdateMutation.isLoading}
+            >
+              {editMode ? 'Update' : 'Create'}
             </Button>
           </Flex>
         </form>

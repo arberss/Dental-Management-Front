@@ -60,7 +60,7 @@ const Table = ({
         frozen: options?.actionColumn?.frozen,
         width: options?.actionColumn?.width,
         headerRenderer: ({ column }: { column: columnRowType }) => column?.name,
-        formatter: ({ row }: { row: any }): JSX.Element => (
+        renderCell: ({ row }: { row: any }): JSX.Element => (
           <div className='tableGrid__actions'>
             <ColumnActions rowData={row} actions={actions} />
           </div>
