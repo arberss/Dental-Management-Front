@@ -1,25 +1,29 @@
-import { Button, Sx } from '@mantine/core';
+import { Button, Flex, Sx } from '@mantine/core';
 import { IconFilePlus } from '@tabler/icons-react';
-import './tableTopActions.scss';
 
 interface TableTopActionsProps {
   title: string;
   onClick?: () => void;
-  sx?: Sx;
+  sxWrapper?: Sx;
+  sxBtn?: Sx;
 }
 
-const TableTopActions = ({ title, onClick, sx }: TableTopActionsProps) => {
+const TableTopActions = ({
+  title,
+  onClick,
+  sxWrapper = { margin: '10px 0' },
+  sxBtn,
+}: TableTopActionsProps) => {
   return (
-    <div className='tableTopActions'>
+    <Flex justify='flex-end' sx={sxWrapper}>
       <Button
         leftIcon={<IconFilePlus size={18} />}
         onClick={onClick}
-        className='tableTopActions__button'
-        sx={sx}
+        sx={sxBtn}
       >
         {title}
       </Button>
-    </div>
+    </Flex>
   );
 };
 

@@ -2,8 +2,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import './styles/main.scss';
-
 import { setupAxios } from './utils/axios';
+import { AuthContextProvider } from './context/authContext';
 
 setupAxios();
 
@@ -18,7 +18,9 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
-    <App />
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
   </QueryClientProvider>
   // </React.StrictMode>,
 );

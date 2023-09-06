@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, Sx } from '@mantine/core';
 
 export interface Actions {
   type: 'edit' | 'delete' | string;
@@ -7,6 +7,7 @@ export interface Actions {
   svgComponent?: any;
   text: string;
   action?: () => void;
+  sx?: Sx;
 }
 
 export type Props<T = any> = {
@@ -32,7 +33,8 @@ const ColumnActions = <T extends unknown>(props: Props<T>): JSX.Element => {
               element?.action ? element?.action() : null
             }
             compact
-            variant="white"
+            variant='white'
+            sx={element?.sx}
           >
             {element?.svgComponent && element.svgComponent}
             {element?.icon && <img src={element?.icon} alt='' />}

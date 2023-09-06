@@ -7,7 +7,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 export const setupAxios = () => {
   axios.interceptors.request.use((config) => {
     // config token as default per request
-    const _token = localStorage.getItem('token');
+    const _token = localStorage.getItem('dental-token');
     if (_token) {
       config.headers.Authorization = `Bearer ${_token}`;
     }

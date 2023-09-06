@@ -30,18 +30,33 @@ const Navbar = ({ isOpen }: NavbarProps) => {
 
   return (
     <MantineNavbar
-      p='md'
+      // p='md'
       hiddenBreakpoint='md'
       hidden={!isOpen}
       width={{ md: 250 }}
+      sx={(theme) => ({
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? theme.colors.dark[6]
+            : theme.colors.gray[1],
+        borderTopRightRadius: theme.radius.lg,
+        borderBottomRightRadius: theme.radius.lg,
+        padding: 0,
+
+        [theme.fn.smallerThan('md')]: {
+          width: 300,
+          borderTopRightRadius: 0,
+          borderBottomRightRadius: 0,
+        },
+      })}
     >
       <MantineNavbar.Section>
-        <NavbarHeader />
+        <NavbarHeader title='Dental Management' />
       </MantineNavbar.Section>
-      <MantineNavbar.Section grow mt='md'>
+      <MantineNavbar.Section grow mt='xl' p="sm">
         <MainLinks linkData={linkData} />
       </MantineNavbar.Section>
-      <MantineNavbar.Section mt='md'>
+      <MantineNavbar.Section mt='xl' p="sm">
         <MainLinks linkData={linkDataFooter} />
       </MantineNavbar.Section>
     </MantineNavbar>

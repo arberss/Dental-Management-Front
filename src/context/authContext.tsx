@@ -23,13 +23,13 @@ export const AuthContextProvider = ({
   const [token, setToken] = useState<string | null>(null);
 
   const handleLogin = (token: string) => {
-    localStorage.setItem('token', token);
+    localStorage.setItem('dental-token', token);
     setToken(token);
     setIsAuth(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('dental-token');
     setToken(null);
     setIsAuth(false);
   };

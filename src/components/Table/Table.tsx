@@ -1,4 +1,5 @@
 import Outside from '@/shared-components/OutsideWrapper/Outside';
+import { Text, useMantineColorScheme } from '@mantine/core';
 import DataGrid from 'react-data-grid';
 import 'react-data-grid/lib/styles.css';
 import Pagination from '../Pagination/Pagination';
@@ -10,7 +11,7 @@ export type columnRowType = { [key: string]: any };
 
 export interface TableProps {
   columns: { key: string; name: string }[];
-  rows: { key: string; [key: string]: string | number | undefined }[];
+  rows: { [key: string]: any }[];
   onRowClick?: (column: columnRowType, row: columnRowType) => void;
   onRowDoubleClick?: (column: columnRowType, row: columnRowType) => void;
   exports?: { pdf?: boolean; excel?: boolean; csv?: boolean };
@@ -47,6 +48,8 @@ const Table = ({
   style,
   onOutsideClick,
 }: TableProps) => {
+  const { colorScheme } = useMantineColorScheme();
+
   let customColumns = [...columns];
 
   if (actions) {
@@ -57,7 +60,7 @@ const Table = ({
         frozen: options?.actionColumn?.frozen,
         width: options?.actionColumn?.width,
         headerRenderer: ({ column }: { column: columnRowType }) => column?.name,
-        formatter: ({ row }: { row: any }): JSX.Element => (
+        renderCell: ({ row }: { row: any }): JSX.Element => (
           <div className='tableGrid__actions'>
             <ColumnActions rowData={row} actions={actions} />
           </div>
@@ -75,11 +78,23 @@ const Table = ({
   const gridElement = (
     <DataGrid
       style={style}
-      className='rdg-light tableGrid'
+      className={`${
+        colorScheme === 'dark' ? 'rdg-dark' : 'rdg-light'
+      } tableGrid`}
       columns={customColumns}
       rows={rows}
-      onRowDoubleClick={onRowDoubleClick}
-      onRowClick={onRowClick}
+      onCellDoubleClick={onRowDoubleClick}
+      onCellClick={onRowClick}
+      renderers={{
+        noRowsFallback: (
+          <Text
+            sx={{ padding: '10px', textAlign: 'center', gridColumn: '1/-1' }}
+            size='md'
+          >
+            There is no data
+          </Text>
+        ),
+      }}
       bottomSummaryRows={bottomRows}
       rowHeight={45}
     />

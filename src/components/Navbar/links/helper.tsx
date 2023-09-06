@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconCash } from '@tabler/icons-react';
+import { IconUsers } from '@tabler/icons-react';
 
 export interface LinkDataProps {
   icon: JSX.Element;
@@ -11,9 +11,9 @@ export interface LinkDataProps {
 
 export const linkData: LinkDataProps[] = [
   {
-    icon: <IconCash size={20} />,
+    icon: <IconUsers size={20} />,
     color: 'blue',
-    label: 'Payments',
-    to: '/payments',
+    label: 'Patients',
+    to: '/patients',
   },
 ];
