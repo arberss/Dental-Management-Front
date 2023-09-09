@@ -9,4 +9,6 @@ export const endpoints = {
   updatePatient: '/patient/updatePatient',
   patientTreatments: '/treatments/patientTreatments/::patientId',
   treatments: '/treatments',
+  deleteTreatment: '/treatments/deleteTreatment/::treatmentId',
+  updateTreatment: '/treatments/updateTreatment',
 };

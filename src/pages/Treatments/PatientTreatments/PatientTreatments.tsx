@@ -1,3 +1,4 @@
+import { Actions } from '@/components/Table/actions/TableActions';
 import Table, { TableProps } from '@/components/Table/Table';
 import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import { endpoints } from '@/config/endpoints';
@@ -19,6 +20,9 @@ const Treatments = () => {
 
   const [addTreatmentDrawerOpened, setAddTreatmentDrawerOpened] =
     useState(false);
+  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(
+    null
+  );
 
   const { data: treatments = [] } = usePagination<Treatment[]>(
     endpoints.patientTreatments.replace('::patientId', params?.patientId ?? ''),
@@ -50,8 +54,28 @@ const Treatments = () => {
     },
   };
 
+  const tableActions = [
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'edit',
+      text: 'Edit',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.yellow[4],
+        color: theme.colors.dark[8],
+      }),
+      action: (): void => {
+        setSelectedTreatment(
+          ({
+            ...rowData,
+            doctor: rowData?.doctor?._id,
+          } as Treatment) ?? null
+        );
+      },
+    }),
+  ];
+
   const handleTreatmentModalClose = () => {
     setAddTreatmentDrawerOpened(false);
+    setSelectedTreatment(null);
   };
 
   return (
@@ -65,11 +89,21 @@ const Treatments = () => {
           onClick={() => setAddTreatmentDrawerOpened(true)}
         />
       </Flex>
-      <Table columns={columns} rows={treatments ?? []} options={tableOptions} />
+      <Table
+        columns={columns}
+        rows={treatments ?? []}
+        options={tableOptions}
+        actions={tableActions}
+      />
       <AddTreatment
-        title='Add Treatment'
-        opened={addTreatmentDrawerOpened}
+        title={selectedTreatment ? 'Edit Treatment' : 'Add Treatment'}
+        opened={
+          selectedTreatment
+            ? Boolean(selectedTreatment)
+            : addTreatmentDrawerOpened
+        }
         onClose={handleTreatmentModalClose}
+        selectedData={selectedTreatment}
       />
     </Box>
   );

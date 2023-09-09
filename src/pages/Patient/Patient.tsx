@@ -11,7 +11,7 @@ import {
   Text,
 } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router-dom';
-import Treatments from '../Treatments/PatientTreatments/Treatments';
+import Treatments from '../Treatments/PatientTreatments/PatientTreatments';
 import Loader from '@/components/Loader/Loader';
 import { IPatient } from './patient.interface';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';

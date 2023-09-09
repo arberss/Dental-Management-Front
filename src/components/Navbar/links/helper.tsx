@@ -17,7 +17,7 @@ export const linkData: LinkDataProps[] = [
     to: '/patients',
   },
   {
-    icon: <IconReportMedical size={20} />,
+    icon: <IconReportMedical size={20} color="orange" />,
     color: 'blue',
     label: 'Treatments',
     to: '/treatments',

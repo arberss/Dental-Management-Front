@@ -6,15 +6,18 @@ import { usePagination } from '@/hooks/react-query/usePagination';
 import Input from '@/shared-components/Form/Input/Input';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
 import { Flex } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 import { columns } from './helper';
 import { Treatment } from './PatientTreatments/Create/index.interface';
 import { IconReportMedical } from '@tabler/icons-react';
 import Card from '@/components/Card/Card';
 import { IPagination } from '@/components/Pagination/Pagination.interface';
+import { Actions } from '@/components/Table/actions/TableActions';
+import ConfirmModal from '@/components/ConfirmModal/ConfirmModal';
+import { useDeleteMutation } from '@/hooks/react-query/useMutation';
+import { useQueryClient } from 'react-query';
 
 const Treatments = () => {
-  //   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [paginations, setPaginations] = useState<IPagination>({
     page: 1,
@@ -22,6 +25,10 @@ const Treatments = () => {
     totalPages: 10,
   });
   const [searchTreatment, setSearchTreatment] = useState('');
+  const [deleteTreatmentId, setDeleteTreatmentId] = useState<null | string>(
+    null
+  );
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
 
   const { data, isLoading, isSuccess } = usePagination<{
     items: Treatment[];
@@ -31,6 +38,10 @@ const Treatments = () => {
     size: paginations.size,
     search: searchTreatment,
   });
+
+  const deleteMutation = useDeleteMutation(
+    endpoints.deleteTreatment.replace('::treatmentId', deleteTreatmentId ?? '')
+  );
 
   useEffect(() => {
     if (isSuccess) {
@@ -61,6 +72,21 @@ const Treatments = () => {
     },
   };
 
+  const tableActions = [
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'delete',
+      text: 'Delete',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.orange[9],
+        color: theme.colors.gray[0],
+      }),
+      action: (): void => {
+        setDeleteTreatmentId(rowData?._id);
+        setConfirmDeleteModal(true);
+      },
+    }),
+  ];
+
   const cards = [
     {
       icon: <IconReportMedical size='35px' color='green' />,
@@ -73,39 +99,65 @@ const Treatments = () => {
     setSearchTreatment(e.target.value);
   };
 
+  const handleCloseDeleteModal = () => {
+    setDeleteTreatmentId(null);
+    setConfirmDeleteModal(false);
+  };
+
+  const handleConfirmDeleteTreatment = () => {
+    deleteMutation.mutate(
+      {},
+      {
+        onSuccess: () => {
+          handleCloseDeleteModal();
+          queryClient.invalidateQueries(endpoints.treatments);
+        },
+      }
+    );
+  };
+
   if (isLoading) return <Loader />;
 
   return (
-    <RightContent>
-      <>
-        <Flex gap='lg' align='center' wrap='wrap' pb='lg'>
-          {cards.map((card) => {
-            return (
-              <Card
-                key={card.title}
-                icon={card.icon}
-                title={card.title}
-                value={card.value}
-              />
-            );
-          })}
-        </Flex>
-        <Flex justify='space-between' align='center' my='xs'>
-          <Input
-            name='treatmentSearch'
-            value={searchTreatment}
-            onChange={handleSearchTreatment}
-            placeholder='Search'
+    <>
+      <RightContent>
+        <>
+          <Flex gap='lg' align='center' wrap='wrap' pb='lg'>
+            {cards.map((card) => {
+              return (
+                <Card
+                  key={card.title}
+                  icon={card.icon}
+                  title={card.title}
+                  value={card.value}
+                />
+              );
+            })}
+          </Flex>
+          <Flex justify='space-between' align='center' my='xs'>
+            <Input
+              name='treatmentSearch'
+              value={searchTreatment}
+              onChange={handleSearchTreatment}
+              placeholder='Search'
+            />
+          </Flex>
+          <Table
+            columns={columns}
+            rows={data?.items ?? []}
+            options={tableOptions}
+            actions={tableActions}
           />
-        </Flex>
-        <Table
-          columns={columns}
-          rows={data?.items ?? []}
-          options={tableOptions}
-          // actions={tableActions}
-        />
-      </>
-    </RightContent>
+        </>
+      </RightContent>
+      <ConfirmModal
+        isOpen={confirmDeleteModal}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteTreatment}
+        title='Delete treatment'
+        description='Are you sure you want to delete the treatment?'
+      />
+    </>
   );
 };
 

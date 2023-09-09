@@ -10,17 +10,24 @@ import { ChangeEvent } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { validationSchema } from './helper';
-import { IAddPatientTreatment } from './index.interface';
+import { IAddPatientTreatment, Treatment } from './index.interface';
 
 interface AddPatientProps {
   opened: boolean;
   onClose: () => void;
   title: string;
+  selectedData?: Treatment | null;
 }
 
-const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
+const AddTreatment = ({
+  opened,
+  onClose,
+  title,
+  selectedData,
+}: AddPatientProps) => {
   const params: Readonly<{ patientId?: string }> = useParams();
   const queryClient = useQueryClient();
+  const editMode = !!selectedData;
 
   const { data: doctors } = usePagination<{
     items: { _id: string; firstName: string; lastName: string }[];
@@ -38,25 +45,25 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
     }) ?? [];
 
   const putMutation = usePutMutation(endpoints.addPatientTreatment);
+  const putMutationUpdate = usePutMutation(endpoints.updateTreatment);
 
-  const initialValues: IAddPatientTreatment = {
+  const treatmentInitialValues: IAddPatientTreatment = {
     name: '',
     description: '',
     price: undefined,
     doctor: '',
   };
 
+  const initialValues = editMode ? selectedData : treatmentInitialValues;
+
   const { values, setFieldValue, resetForm, errors, handleSubmit } = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values, formikHelpers) => {
       try {
-        putMutation.mutate(
-          {
-            _id: params?.patientId,
-            treatment: values,
-          },
-          {
+        if (editMode) {
+          putMutationUpdate.mutate(values, {
             onSuccess() {
               queryClient.invalidateQueries(
                 endpoints.patientTreatments.replace(
@@ -64,12 +71,31 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
                   params?.patientId ?? ''
                 )
               );
-              queryClient.invalidateQueries(endpoints.patientsStats);
               handleClose();
               formikHelpers.resetForm();
             },
-          }
-        );
+          });
+        } else {
+          putMutation.mutate(
+            {
+              _id: params?.patientId,
+              treatment: values,
+            },
+            {
+              onSuccess() {
+                queryClient.invalidateQueries(
+                  endpoints.patientTreatments.replace(
+                    '::patientId',
+                    params?.patientId ?? ''
+                  )
+                );
+                queryClient.invalidateQueries(endpoints.patientsStats);
+                handleClose();
+                formikHelpers.resetForm();
+              },
+            }
+          );
+        }
       } catch (error) {
         return error;
       }
@@ -166,10 +192,10 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
             <Button
               bg='blue.8'
               type='submit'
-              disabled={putMutation.isLoading}
-              loading={putMutation.isLoading}
+              disabled={putMutation.isLoading || putMutationUpdate.isLoading}
+              loading={putMutation.isLoading || putMutationUpdate.isLoading}
             >
-              Create
+              {editMode ? 'Edit' : 'Create'}
             </Button>
           </Flex>
         </form>
