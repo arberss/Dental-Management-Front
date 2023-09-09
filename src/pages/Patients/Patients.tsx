@@ -5,7 +5,7 @@ import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import { endpoints } from '@/config/endpoints';
 import { usePagination } from '@/hooks/react-query/usePagination';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { columns } from './helper';
 import { IconUsers } from '@tabler/icons-react';
 import { Flex } from '@mantine/core';
@@ -13,8 +13,9 @@ import { useQuery } from '@/hooks/react-query/useQuery';
 import AddPatient from './Create/AddPatient';
 import Input from '@/shared-components/Form/Input/Input';
 import { useNavigate } from 'react-router-dom';
-import { IPatient } from '../Patient/index.interface';
+import { IPatient } from '../Patient/patient.interface';
 import { Actions } from '@/components/Table/actions/TableActions';
+import { IPagination } from '@/components/Pagination/Pagination.interface';
 
 const Patients = () => {
   const navigate = useNavigate();
@@ -30,8 +31,9 @@ const Patients = () => {
     [key: string]: any;
   } | null>(null);
 
-  const { data, isLoading } = usePagination<{
+  const { data, isLoading, isSuccess } = usePagination<{
     items: IPatient[];
+    pageInfo: IPagination;
   }>(endpoints.patients, {
     page: paginations.page,
     size: paginations.size,
@@ -47,6 +49,15 @@ const Patients = () => {
     totalPatients: number;
     totalTodayTreatments: number;
   }>(endpoints.patientsStats);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setPaginations({
+        ...paginations,
+        totalPages: data.pageInfo.totalPages,
+      });
+    }
+  }, [isSuccess]);
 
   const tableOptions: TableProps['options'] = {
     tableTitle: '',

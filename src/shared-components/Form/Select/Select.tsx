@@ -11,7 +11,7 @@ interface SelectProps {
   error?: string;
   searchable?: boolean;
   disabled?: boolean;
-  dropdownPosition: 'bottom' | 'top' | 'flip' | undefined;
+  dropdownPosition?: 'bottom' | 'top' | 'flip' | undefined;
   sx?: Sx;
 }
 
