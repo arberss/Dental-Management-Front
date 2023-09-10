@@ -15,6 +15,7 @@ import { Actions } from '@/components/Table/actions/TableActions';
 import ConfirmModal from '@/components/ConfirmModal/ConfirmModal';
 import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { useQueryClient } from 'react-query';
+import AddTreatment from './PatientTreatments/Create/AddTreatment';
 
 const Treatments = () => {
   const queryClient = useQueryClient();
@@ -25,10 +26,12 @@ const Treatments = () => {
     totalPages: 10,
   });
   const [searchTreatment, setSearchTreatment] = useState('');
+  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(
+    null
+  );
   const [deleteTreatmentId, setDeleteTreatmentId] = useState<null | string>(
     null
   );
-  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
 
   const { data, isLoading, isSuccess } = usePagination<{
     items: Treatment[];
@@ -42,6 +45,14 @@ const Treatments = () => {
   const deleteMutation = useDeleteMutation(
     endpoints.deleteTreatment.replace('::treatmentId', deleteTreatmentId ?? '')
   );
+
+  const refetchPatientTreatments = () => {
+    queryClient.invalidateQueries(endpoints.treatments);
+  };
+
+  const onUpdateInvalidateQueries = () => {
+    refetchPatientTreatments();
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -74,6 +85,22 @@ const Treatments = () => {
 
   const tableActions = [
     ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'edit',
+      text: 'Edit',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.yellow[4],
+        color: theme.colors.dark[8],
+      }),
+      action: (): void => {
+        setSelectedTreatment(
+          ({
+            ...rowData,
+            doctor: rowData?.doctor?._id,
+          } as Treatment) ?? null
+        );
+      },
+    }),
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
       type: 'delete',
       text: 'Delete',
       sx: (theme) => ({
@@ -82,7 +109,6 @@ const Treatments = () => {
       }),
       action: (): void => {
         setDeleteTreatmentId(rowData?._id);
-        setConfirmDeleteModal(true);
       },
     }),
   ];
@@ -95,13 +121,16 @@ const Treatments = () => {
     },
   ];
 
+  const handleTreatmentModalClose = () => {
+    setSelectedTreatment(null);
+  };
+
   const handleSearchTreatment = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTreatment(e.target.value);
   };
 
   const handleCloseDeleteModal = () => {
     setDeleteTreatmentId(null);
-    setConfirmDeleteModal(false);
   };
 
   const handleConfirmDeleteTreatment = () => {
@@ -150,12 +179,20 @@ const Treatments = () => {
           />
         </>
       </RightContent>
+      <AddTreatment
+        title='Edit Treatment'
+        opened={!!selectedTreatment}
+        onClose={handleTreatmentModalClose}
+        selectedData={selectedTreatment}
+        onUpdateInvalidateQueries={onUpdateInvalidateQueries}
+      />
       <ConfirmModal
-        isOpen={confirmDeleteModal}
+        isOpen={!!deleteTreatmentId}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDeleteTreatment}
         title='Delete treatment'
         description='Are you sure you want to delete the treatment?'
+        loading={deleteMutation.isLoading}
       />
     </>
   );

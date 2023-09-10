@@ -6,6 +6,7 @@ interface ConfirmModalProps {
   onConfirm: () => void;
   title?: string;
   description?: string;
+  loading?: boolean;
 }
 
 const ConfirmModal = ({
@@ -14,6 +15,7 @@ const ConfirmModal = ({
   onConfirm,
   title,
   description,
+  loading,
 }: ConfirmModalProps) => {
   return (
     <Modal
@@ -51,7 +53,9 @@ const ConfirmModal = ({
           })}
           variant='white'
           color='blue'
-          onClick={() => onConfirm()}
+          onClick={onConfirm}
+          disabled={!!loading}
+          loading={!!loading}
         >
           Confirm
         </Button>

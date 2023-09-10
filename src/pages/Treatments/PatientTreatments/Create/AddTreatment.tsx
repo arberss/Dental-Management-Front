@@ -7,7 +7,6 @@ import Select from '@/shared-components/Form/Select/Select';
 import { Box, Button, Drawer, Flex, Grid } from '@mantine/core';
 import { useFormik } from 'formik';
 import { ChangeEvent } from 'react';
-import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { validationSchema } from './helper';
 import { IAddPatientTreatment, Treatment } from './index.interface';
@@ -17,6 +16,8 @@ interface AddPatientProps {
   onClose: () => void;
   title: string;
   selectedData?: Treatment | null;
+  onCreateInvalidateQueries?: () => void;
+  onUpdateInvalidateQueries?: () => void;
 }
 
 const AddTreatment = ({
@@ -24,9 +25,10 @@ const AddTreatment = ({
   onClose,
   title,
   selectedData,
+  onCreateInvalidateQueries,
+  onUpdateInvalidateQueries,
 }: AddPatientProps) => {
   const params: Readonly<{ patientId?: string }> = useParams();
-  const queryClient = useQueryClient();
   const editMode = !!selectedData;
 
   const { data: doctors } = usePagination<{
@@ -65,12 +67,10 @@ const AddTreatment = ({
         if (editMode) {
           putMutationUpdate.mutate(values, {
             onSuccess() {
-              queryClient.invalidateQueries(
-                endpoints.patientTreatments.replace(
-                  '::patientId',
-                  params?.patientId ?? ''
-                )
-              );
+              if (onUpdateInvalidateQueries) {
+                onUpdateInvalidateQueries();
+              }
+
               handleClose();
               formikHelpers.resetForm();
             },
@@ -83,13 +83,9 @@ const AddTreatment = ({
             },
             {
               onSuccess() {
-                queryClient.invalidateQueries(
-                  endpoints.patientTreatments.replace(
-                    '::patientId',
-                    params?.patientId ?? ''
-                  )
-                );
-                queryClient.invalidateQueries(endpoints.patientsStats);
+                if (onCreateInvalidateQueries) {
+                  onCreateInvalidateQueries();
+                }
                 handleClose();
                 formikHelpers.resetForm();
               },
