@@ -12,12 +12,12 @@ const localColorScheme = localStorage.getItem(
 
 function App() {
   const { isAuth, handleLogout } = useContext(AuthContext);
-  
+
   const [colorScheme, setColorScheme] = useState<ColorScheme>(
     localColorScheme ?? 'light'
   );
   const toggleColorScheme = (value: ColorScheme) => {
-    const val = value || (colorScheme === 'dark' ? 'light' : 'dark')
+    const val = value || (colorScheme === 'dark' ? 'light' : 'dark');
     setColorScheme(val);
     localStorage.setItem('dental-color-mode', val);
   };

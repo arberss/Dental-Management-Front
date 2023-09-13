@@ -88,7 +88,7 @@ const Patients = () => {
         color: theme.colors.gray[1],
       }),
       action: (): void => {
-        navigate(`/patient/${rowData?._id}`);
+        navigate(`/patients/patient/${rowData?._id}`);
       },
     }),
   ];

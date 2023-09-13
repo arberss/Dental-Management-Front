@@ -11,9 +11,15 @@ import Card from '@/components/Card/Card';
 import { IPagination } from '@/components/Pagination/Pagination.interface';
 import { IDoctor } from './doctors.interface';
 import { columns } from './helper';
+import TableTopActions from '@/components/TableTopActions/TableTopActions';
+import CreateUser from '@/components/CreateUser/CreateUser';
+import { useQueryClient } from 'react-query';
+import toast from '@/shared-components/toast/Toast';
 
 const Doctors = () => {
-  //   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const [addPatientDrawerOpened, setAddPatientDrawerOpened] = useState(false);
 
   const [paginations, setPaginations] = useState<IPagination>({
     page: 1,
@@ -68,43 +74,71 @@ const Doctors = () => {
     },
   ];
 
+  const refetchDoctors = () => {
+    queryClient.invalidateQueries(endpoints.doctors);
+  };
+
+  const onCreateInvalidateQueries = () => {
+    toast({
+      status: 'success',
+      title: 'User created. Check your email to verify the account.',
+    });
+    refetchDoctors();
+  };
+
   const handleSearchDoctor = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchDoctor(e.target.value);
+  };
+
+  const handleAddDoctorModalClose = () => {
+    setAddPatientDrawerOpened(false);
   };
 
   if (isLoading) return <Loader />;
 
   return (
-    <RightContent>
-      <>
-        <Flex gap='lg' align='center' wrap='wrap' pb='lg'>
-          {cards.map((card) => {
-            return (
-              <Card
-                key={card.title}
-                icon={card.icon}
-                title={card.title}
-                value={card.value}
-              />
-            );
-          })}
-        </Flex>
-        <Flex justify='space-between' align='center' my='xs'>
-          <Input
-            name='doctorSearch'
-            value={searchDoctor}
-            onChange={handleSearchDoctor}
-            placeholder='Search'
+    <>
+      <RightContent>
+        <>
+          <Flex gap='lg' align='center' wrap='wrap' pb='lg'>
+            {cards.map((card) => {
+              return (
+                <Card
+                  key={card.title}
+                  icon={card.icon}
+                  title={card.title}
+                  value={card.value}
+                />
+              );
+            })}
+          </Flex>
+          <Flex justify='space-between' align='center'>
+            <Input
+              name='doctorSearch'
+              value={searchDoctor}
+              onChange={handleSearchDoctor}
+              placeholder='Search'
+            />
+            <TableTopActions
+              title='Add Doctor'
+              onClick={() => setAddPatientDrawerOpened(true)}
+            />
+          </Flex>
+          <Table
+            columns={columns}
+            rows={data?.items ?? []}
+            options={tableOptions}
+            // actions={tableActions}
           />
-        </Flex>
-        <Table
-          columns={columns}
-          rows={data?.items ?? []}
-          options={tableOptions}
-          // actions={tableActions}
-        />
-      </>
-    </RightContent>
+        </>
+      </RightContent>
+      <CreateUser
+        onClose={handleAddDoctorModalClose}
+        opened={addPatientDrawerOpened}
+        title='Add Doctor'
+        onCreateInvalidateQueries={onCreateInvalidateQueries}
+      />
+    </>
   );
 };
 

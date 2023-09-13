@@ -11,4 +11,6 @@ export const endpoints = {
   treatments: '/treatments',
   deleteTreatment: '/treatments/deleteTreatment/::treatmentId',
   updateTreatment: '/treatments/updateTreatment',
+  registerUser: '/user/registerUser',
+  verifyRegisteredUser: '/user/verifyRegisteredUser',
 };

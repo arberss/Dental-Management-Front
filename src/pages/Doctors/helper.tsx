@@ -1,3 +1,4 @@
+import Badge from '@/components/Badge/Badge';
 import TableSelectedColumn from '@/components/Table/components/TableSelectedColumn/TableSelectedColumn';
 import { columnRowType } from '@/components/Table/Table';
 import * as dayjs from 'dayjs';
@@ -25,6 +26,17 @@ export const columns = [
           uniqueKey='createdAt'
         />
       );
+    },
+  },
+  {
+    key: 'treatments',
+    name: 'Treatments',
+  },
+  {
+    key: 'status',
+    name: 'Status',
+    renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {
+      return <Badge status={row?.status} />;
     },
   },
   {

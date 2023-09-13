@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import './styles/main.scss';
 import { setupAxios } from './utils/axios';
 import { AuthContextProvider } from './context/authContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 setupAxios();
 
@@ -19,7 +21,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
     <AuthContextProvider>
-      <App />
+      <>
+        <ToastContainer style={{ fontSize: '12px' }} />
+        <App />
+      </>
     </AuthContextProvider>
   </QueryClientProvider>
   // </React.StrictMode>,

@@ -1,3 +1,4 @@
+import VerifyUser from '@/components/CreateUser/VerifyUser/VerifyUser';
 import Login from '@/pages/Auth/Login/Login';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 import Doctors from '@/pages/Doctors/Doctors';
@@ -22,7 +23,7 @@ const RoutesComponent = () => {
         }
       >
         <Route path='patients' element={<Patients />} />
-        <Route path='patient/:patientId' element={<Patient />} />
+        <Route path='patients/patient/:patientId' element={<Patient />} />
         <Route path='treatments' element={<Treatments />} />
         <Route path='doctors' element={<Doctors />} />
       </Route>
@@ -30,6 +31,10 @@ const RoutesComponent = () => {
       {!decodedToken && (
         <>
           <Route path='/auth/login' element={<Login />} />
+          <Route
+            path='/auth/verify-registered-user/token'
+            element={<VerifyUser />}
+          />
         </>
       )}
     </Routes>
