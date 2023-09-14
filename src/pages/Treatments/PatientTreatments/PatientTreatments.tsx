@@ -60,6 +60,8 @@ const Treatments = () => {
     refetchPatientTreatments();
     queryClient.invalidateQueries(endpoints.patientsStats);
     queryClient.invalidateQueries(endpoints.patients);
+    queryClient.invalidateQueries(endpoints.doctors);
+    queryClient.invalidateQueries(endpoints.treatments);
   };
 
   const onUpdateInvalidateQueries = () => {

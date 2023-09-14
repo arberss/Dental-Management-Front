@@ -65,6 +65,7 @@ const AddPatient = ({
             {
               onSuccess() {
                 queryClient.invalidateQueries(endpoints.patients);
+                queryClient.invalidateQueries(endpoints.doctors);
                 queryClient.invalidateQueries(
                   endpoints.patient.replace(
                     '::patientId',
@@ -81,6 +82,7 @@ const AddPatient = ({
             onSuccess() {
               queryClient.invalidateQueries(endpoints.patients);
               queryClient.invalidateQueries(endpoints.patientsStats);
+              queryClient.invalidateQueries(endpoints.doctors);
               handleClose();
               formikHelpers.resetForm();
             },
