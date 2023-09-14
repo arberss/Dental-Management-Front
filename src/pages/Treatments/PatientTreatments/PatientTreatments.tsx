@@ -59,6 +59,7 @@ const Treatments = () => {
   const onCreateInvalidateQueries = () => {
     refetchPatientTreatments();
     queryClient.invalidateQueries(endpoints.patientsStats);
+    queryClient.invalidateQueries(endpoints.patients);
   };
 
   const onUpdateInvalidateQueries = () => {
@@ -136,6 +137,7 @@ const Treatments = () => {
               params?.patientId ?? ''
             )
           );
+          queryClient.invalidateQueries(endpoints.patients);
         },
       }
     );

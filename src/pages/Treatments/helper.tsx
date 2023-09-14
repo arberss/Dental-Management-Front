@@ -12,6 +12,18 @@ export const columns = [
     name: 'Description',
   },
   {
+    key: 'patient',
+    name: 'Patient',
+    renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {
+      return (
+        <TableSelectedColumn
+          value={`${row?.patient?.firstName} ${row?.patient?.parentName} ${row?.patient?.lastName}`}
+          uniqueKey='patient'
+        />
+      );
+    },
+  },
+  {
     key: 'doctor',
     name: 'Doctor',
     renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {

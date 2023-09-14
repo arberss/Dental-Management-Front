@@ -1,10 +1,11 @@
 import { createContext, useState } from 'react';
+import { useQueryClient } from 'react-query';
 
 interface IAuthContext {
   isAuth: boolean;
   token: string | null;
-  handleLogin: (_value: string) => void,
-  handleLogout: () => void,
+  handleLogin: (_value: string) => void;
+  handleLogout: () => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -19,6 +20,8 @@ export const AuthContextProvider = ({
 }: {
   children: JSX.Element;
 }) => {
+  const queryClient = useQueryClient();
+
   const [isAuth, setIsAuth] = useState(false);
   const [token, setToken] = useState<string | null>(null);
 
@@ -32,6 +35,7 @@ export const AuthContextProvider = ({
     localStorage.removeItem('dental-token');
     setToken(null);
     setIsAuth(false);
+    queryClient.removeQueries();
   };
 
   return (
