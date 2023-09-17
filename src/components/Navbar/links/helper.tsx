@@ -1,5 +1,10 @@
 import React from 'react';
-import { IconUsers, IconReportMedical, IconUser } from '@tabler/icons-react';
+import {
+  IconUsers,
+  IconReportMedical,
+  IconUser,
+  IconCalendar,
+} from '@tabler/icons-react';
 
 export interface LinkDataProps {
   icon: JSX.Element;
@@ -17,7 +22,7 @@ export const linkData: LinkDataProps[] = [
     to: '/patients',
   },
   {
-    icon: <IconReportMedical size={20} color="orange" />,
+    icon: <IconReportMedical size={20} color='orange' />,
     color: 'blue',
     label: 'Treatments',
     to: '/treatments',
@@ -27,5 +32,11 @@ export const linkData: LinkDataProps[] = [
     color: 'blue',
     label: 'Doctors',
     to: '/doctors',
+  },
+  {
+    icon: <IconCalendar size={20} />,
+    color: 'blue',
+    label: 'Schedules',
+    to: '/schedules',
   },
 ];

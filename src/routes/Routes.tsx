@@ -4,6 +4,7 @@ import Dashboard from '@/pages/Dashboard/Dashboard';
 import Doctors from '@/pages/Doctors/Doctors';
 import Patient from '@/pages/Patient/Patient';
 import Patients from '@/pages/Patients/Patients';
+import Schedule from '@/pages/Schedule/Schedule';
 import Treatments from '@/pages/Treatments/Treatments';
 import { decodeToken } from '@/utils/decodeToken';
 import { Route, Routes } from 'react-router-dom';
@@ -26,6 +27,7 @@ const RoutesComponent = () => {
         <Route path='patients/patient/:patientId' element={<Patient />} />
         <Route path='treatments' element={<Treatments />} />
         <Route path='doctors' element={<Doctors />} />
+        <Route path='schedules' element={<Schedule />} />
       </Route>
 
       {!decodedToken && (

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { IAddPationFields } from './index.interface';
 
 export const validationSchema = Yup.object({

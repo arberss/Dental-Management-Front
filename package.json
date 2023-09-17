@@ -17,6 +17,11 @@
     "lint-scss-fix": "stylelint \"**/*.scss\" --fix"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.8",
+    "@fullcalendar/interaction": "^6.1.8",
+    "@fullcalendar/list": "^6.1.8",
+    "@fullcalendar/react": "^6.1.8",
+    "@fullcalendar/timegrid": "^6.1.8",
     "@mantine/core": "^6.0.19",
     "@mantine/dates": "^6.0.19",
     "@tabler/icons-react": "^2.32.0",
