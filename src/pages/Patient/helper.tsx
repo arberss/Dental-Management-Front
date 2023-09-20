@@ -1,5 +1,5 @@
-import * as dayjs from 'dayjs';
-import { IPatient } from './index.interface';
+import dayjs from 'dayjs';
+import { IPatient } from './patient.interface';
 
 
 export const cardsInfo = (data?: IPatient) => [

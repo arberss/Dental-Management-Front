@@ -1,7 +1,7 @@
 import { endpoints } from '@/config/endpoints';
 import { usePutMutation } from '@/hooks/react-query/useMutation';
 import { usePagination } from '@/hooks/react-query/usePagination';
-import { IPatient } from '@/pages/Patient/index.interface';
+import { IPatient } from '@/pages/Patient/patient.interface';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
 import Select from '@/shared-components/Form/Select/Select';
@@ -65,6 +65,7 @@ const AddPatient = ({
             {
               onSuccess() {
                 queryClient.invalidateQueries(endpoints.patients);
+                queryClient.invalidateQueries(endpoints.doctors);
                 queryClient.invalidateQueries(
                   endpoints.patient.replace(
                     '::patientId',
@@ -81,6 +82,7 @@ const AddPatient = ({
             onSuccess() {
               queryClient.invalidateQueries(endpoints.patients);
               queryClient.invalidateQueries(endpoints.patientsStats);
+              queryClient.invalidateQueries(endpoints.doctors);
               handleClose();
               formikHelpers.resetForm();
             },

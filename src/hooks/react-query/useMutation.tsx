@@ -33,3 +33,17 @@ export const usePutMutation = <T extends unknown>(
     options
   );
 };
+
+export const useDeleteMutation = <T extends unknown>(
+  path: UseMutationProps['path'],
+  options?: UseMutationProps['options']
+) => {
+  return useMutation<T, Error, any, unknown>(
+    path,
+    async (): Promise<T> => {
+      const result = await axios.delete(path);
+      return result.data as T;
+    },
+    options
+  );
+};

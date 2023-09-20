@@ -1,26 +1,42 @@
+import Badge from '@/components/Badge/Badge';
 import TableSelectedColumn from '@/components/Table/components/TableSelectedColumn/TableSelectedColumn';
 import { columnRowType } from '@/components/Table/Table';
 import dayjs from 'dayjs';
 
 export const columns = [
   {
-    key: 'name',
-    name: 'Name',
+    key: 'firstName',
+    name: 'First Name',
   },
   {
-    key: 'description',
-    name: 'Description',
+    key: 'lastName',
+    name: 'Last Name',
   },
   {
-    key: 'doctor',
-    name: 'Doctor',
+    key: 'email',
+    name: 'Email',
+  },
+  {
+    key: 'patients',
+    name: 'Patients',
     renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {
       return (
         <TableSelectedColumn
-          value={`${row?.doctor?.firstName} ${row?.doctor?.lastName}`}
-          uniqueKey='doctor'
+          value={row?.patients?.length}
+          uniqueKey='createdAt'
         />
       );
+    },
+  },
+  {
+    key: 'treatments',
+    name: 'Treatments',
+  },
+  {
+    key: 'status',
+    name: 'Status',
+    renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {
+      return <Badge status={row?.status} />;
     },
   },
   {

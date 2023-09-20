@@ -6,6 +6,7 @@ interface ConfirmModalProps {
   onConfirm: () => void;
   title?: string;
   description?: string;
+  loading?: boolean;
 }
 
 const ConfirmModal = ({
@@ -14,6 +15,7 @@ const ConfirmModal = ({
   onConfirm,
   title,
   description,
+  loading,
 }: ConfirmModalProps) => {
   return (
     <Modal
@@ -24,21 +26,36 @@ const ConfirmModal = ({
       closeOnClickOutside={true}
       centered
     >
-      <Text size={16} align='center'>{description}</Text>
-      <Flex columnGap={10} sx={{marginTop: 10}}>
+      <Text size={16} align='center'>
+        {description}
+      </Text>
+      <Flex columnGap={10} sx={{ marginTop: 10 }}>
         <Button
-          sx={{ width: '100%', marginTop: 10, fontSize: 16 }}
-          variant='outline'
+          sx={(theme) => ({
+            backgroundColor: theme.colors.dark[3],
+            color: theme.colors.gray[0],
+            width: '100%',
+            marginTop: 10,
+            fontSize: 16,
+          })}
+          variant='white'
           color='dark'
           onClick={() => onClose()}
         >
           Cancel
         </Button>
         <Button
-          sx={{ width: '100%', marginTop: 10, fontSize: 16 }}
-          variant='outline'
+          sx={(theme) => ({
+            color: theme.colors.gray[0],
+            width: '100%',
+            marginTop: 10,
+            fontSize: 16,
+          })}
+          variant='white'
           color='blue'
-          onClick={() => onConfirm()}
+          onClick={onConfirm}
+          disabled={!!loading}
+          loading={!!loading}
         >
           Confirm
         </Button>

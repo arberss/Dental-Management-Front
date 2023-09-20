@@ -4,23 +4,32 @@ import { usePagination } from '@/hooks/react-query/usePagination';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
 import Select from '@/shared-components/Form/Select/Select';
-import { Box, Button, Drawer, Flex, Grid } from '@mantine/core';
+import { Box, Button, Drawer, Flex, Grid, Textarea } from '@mantine/core';
 import { useFormik } from 'formik';
 import { ChangeEvent } from 'react';
-import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { validationSchema } from './helper';
-import { IAddPatientTreatment } from './index.interface';
+import { IAddPatientTreatment, Treatment } from './index.interface';
 
 interface AddPatientProps {
   opened: boolean;
   onClose: () => void;
   title: string;
+  selectedData?: Treatment | null;
+  onCreateInvalidateQueries?: () => void;
+  onUpdateInvalidateQueries?: () => void;
 }
 
-const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
+const AddTreatment = ({
+  opened,
+  onClose,
+  title,
+  selectedData,
+  onCreateInvalidateQueries,
+  onUpdateInvalidateQueries,
+}: AddPatientProps) => {
   const params: Readonly<{ patientId?: string }> = useParams();
-  const queryClient = useQueryClient();
+  const editMode = !!selectedData;
 
   const { data: doctors } = usePagination<{
     items: { _id: string; firstName: string; lastName: string }[];
@@ -38,38 +47,51 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
     }) ?? [];
 
   const putMutation = usePutMutation(endpoints.addPatientTreatment);
+  const putMutationUpdate = usePutMutation(endpoints.updateTreatment);
 
-  const initialValues: IAddPatientTreatment = {
+  const treatmentInitialValues: IAddPatientTreatment = {
     name: '',
     description: '',
     price: undefined,
     doctor: '',
   };
 
+  const initialValues = editMode ? selectedData : treatmentInitialValues;
+
   const { values, setFieldValue, resetForm, errors, handleSubmit } = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values, formikHelpers) => {
       try {
-        putMutation.mutate(
-          {
-            _id: params?.patientId,
-            treatment: values,
-          },
-          {
+        if (editMode) {
+          putMutationUpdate.mutate(values, {
             onSuccess() {
-              queryClient.invalidateQueries(
-                endpoints.patientTreatments.replace(
-                  '::patientId',
-                  params?.patientId ?? ''
-                )
-              );
-              queryClient.invalidateQueries(endpoints.patientsStats);
+              if (onUpdateInvalidateQueries) {
+                onUpdateInvalidateQueries();
+              }
+
               handleClose();
               formikHelpers.resetForm();
             },
-          }
-        );
+          });
+        } else {
+          putMutation.mutate(
+            {
+              _id: params?.patientId,
+              treatment: values,
+            },
+            {
+              onSuccess() {
+                if (onCreateInvalidateQueries) {
+                  onCreateInvalidateQueries();
+                }
+                handleClose();
+                formikHelpers.resetForm();
+              },
+            }
+          );
+        }
       } catch (error) {
         return error;
       }
@@ -103,7 +125,7 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
             className='overflowHoverVisibility'
           >
             <Grid gutter='sm' py='4px'>
-              <Grid.Col span={6}>
+              <Grid.Col span={12}>
                 <Input
                   name='name'
                   label='Treatment Name'
@@ -114,19 +136,21 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
                   error={errors.name}
                 />
               </Grid.Col>
-              <Grid.Col span={6}>
-                <Input
+            </Grid>
+            <Grid>
+              <Grid.Col span={12}>
+                <Textarea
                   name='description'
                   label='Treatment Description'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                     setFieldValue('description', e.target.value)
                   }
+                  minRows={4}
                   value={values.description}
                   error={errors.description}
                 />
               </Grid.Col>
             </Grid>
-
             <Grid gutter='sm' py='4px'>
               <Grid.Col span={6}>
                 <NumberInput
@@ -166,10 +190,10 @@ const AddTreatment = ({ opened, onClose, title }: AddPatientProps) => {
             <Button
               bg='blue.8'
               type='submit'
-              disabled={putMutation.isLoading}
-              loading={putMutation.isLoading}
+              disabled={putMutation.isLoading || putMutationUpdate.isLoading}
+              loading={putMutation.isLoading || putMutationUpdate.isLoading}
             >
-              Create
+              {editMode ? 'Edit' : 'Create'}
             </Button>
           </Flex>
         </form>

@@ -1,4 +1,4 @@
-import { IPatient } from "../Patient/index.interface";
+import { IPatient } from "../Patient/patient.interface";
 
 export interface IPatientsResponse {
   items: IPatient[];

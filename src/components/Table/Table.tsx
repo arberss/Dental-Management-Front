@@ -56,7 +56,7 @@ const Table = ({
     const tableActions = [
       {
         key: 'actions',
-        name: 'Veprimet',
+        name: 'Actions',
         frozen: options?.actionColumn?.frozen,
         width: options?.actionColumn?.width,
         headerRenderer: ({ column }: { column: columnRowType }) => column?.name,

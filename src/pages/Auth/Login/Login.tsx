@@ -1,7 +1,7 @@
 import Input from '@/shared-components/Form/Input/Input';
-import { Button, Flex, PasswordInput} from '@mantine/core';
+import { Button, Flex, PasswordInput } from '@mantine/core';
 import AuthLayout from '@/shared-components/Layouts/Auth/AuthLayout';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { validationSchema } from './helper';
 import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
@@ -51,36 +51,36 @@ const Login = () => {
   });
 
   return (
-      <AuthLayout title='Login'>
-        <>
-          <form onSubmit={formik.handleSubmit}>
-            <Flex gap='md' direction='column'>
-              <Input
-                name='email'
-                label='Email'
-                onChange={formik.handleChange}
-                value={formik.values.email}
-                error={formik.errors.email}
-              />
-              <PasswordInput
-                name='password'
-                label='Password'
-                onChange={formik.handleChange}
-                value={formik.values.password}
-                error={formik.errors.password}
-                visibilityToggleIcon={({ reveal, size }) =>
-                  reveal ? (
-                    <IconEyeOff size={size} />
-                  ) : (
-                    <IconEyeCheck size={size} />
-                  )
-                }
-              />
-              <Button type='submit'>Login</Button>
-            </Flex>
-          </form>
-        </>
-      </AuthLayout>
+    <AuthLayout title='Login'>
+      <>
+        <form onSubmit={formik.handleSubmit}>
+          <Flex gap='md' direction='column'>
+            <Input
+              name='email'
+              label='Email'
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              error={formik.errors.email}
+            />
+            <PasswordInput
+              name='password'
+              label='Password'
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              error={formik.errors.password}
+              visibilityToggleIcon={({ reveal, size }) =>
+                reveal ? (
+                  <IconEyeOff size={size} />
+                ) : (
+                  <IconEyeCheck size={size} />
+                )
+              }
+            />
+            <Button type='submit'>Login</Button>
+          </Flex>
+        </form>
+      </>
+    </AuthLayout>
   );
 };
 

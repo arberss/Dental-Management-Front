@@ -11,15 +11,7 @@ const TableSelectedColumn = ({
 }: TableSelectedColumnProps) => {
   const clickedRowStyle =
     clickedRowId === uniqueKey ? 'tableGrid__row--clicked' : '';
-  return (
-    <div
-      className={`tableGrid__row ${
-        !value ? 'tableGrid__row--empty' : ''
-      } ${clickedRowStyle}`}
-    >
-      {value}
-    </div>
-  );
+  return <div className={`tableGrid__row ${clickedRowStyle}`}>{value}</div>;
 };
 
 export default TableSelectedColumn;
