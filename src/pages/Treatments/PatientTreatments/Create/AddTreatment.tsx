@@ -4,7 +4,7 @@ import { usePagination } from '@/hooks/react-query/usePagination';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
 import Select from '@/shared-components/Form/Select/Select';
-import { Box, Button, Drawer, Flex, Grid } from '@mantine/core';
+import { Box, Button, Drawer, Flex, Grid, Textarea } from '@mantine/core';
 import { useFormik } from 'formik';
 import { ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
@@ -125,7 +125,7 @@ const AddTreatment = ({
             className='overflowHoverVisibility'
           >
             <Grid gutter='sm' py='4px'>
-              <Grid.Col span={6}>
+              <Grid.Col span={12}>
                 <Input
                   name='name'
                   label='Treatment Name'
@@ -136,19 +136,21 @@ const AddTreatment = ({
                   error={errors.name}
                 />
               </Grid.Col>
-              <Grid.Col span={6}>
-                <Input
+            </Grid>
+            <Grid>
+              <Grid.Col span={12}>
+                <Textarea
                   name='description'
                   label='Treatment Description'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                     setFieldValue('description', e.target.value)
                   }
+                  minRows={4}
                   value={values.description}
                   error={errors.description}
                 />
               </Grid.Col>
             </Grid>
-
             <Grid gutter='sm' py='4px'>
               <Grid.Col span={6}>
                 <NumberInput
