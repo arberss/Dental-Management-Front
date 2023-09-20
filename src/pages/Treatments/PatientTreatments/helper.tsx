@@ -1,6 +1,6 @@
 import TableSelectedColumn from '@/components/Table/components/TableSelectedColumn/TableSelectedColumn';
 import { columnRowType } from '@/components/Table/Table';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export const columns = [
   {

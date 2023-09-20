@@ -13,4 +13,7 @@ export const endpoints = {
   updateTreatment: '/treatments/updateTreatment',
   registerUser: '/user/registerUser',
   verifyRegisteredUser: '/user/verifyRegisteredUser',
+  getSchedulers: '/schedulers/all',
+  addScheduler: '/schedulers/add',
+  updateScheduler: '/schedulers/update',
 };
