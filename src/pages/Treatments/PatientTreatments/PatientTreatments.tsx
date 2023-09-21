@@ -2,6 +2,7 @@ import ConfirmModal from '@/components/ConfirmModal/ConfirmModal';
 import { Actions } from '@/components/Table/actions/TableActions';
 import Table, { TableProps } from '@/components/Table/Table';
 import TableTopActions from '@/components/TableTopActions/TableTopActions';
+import TreatmentInvoice from '@/components/TreatmentInvoice/TreatmentInvoice';
 import { endpoints } from '@/config/endpoints';
 import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { usePagination } from '@/hooks/react-query/usePagination';
@@ -29,6 +30,9 @@ const Treatments = () => {
     null
   );
   const [deleteTreatmentId, setDeleteTreatmentId] = useState<null | string>(
+    null
+  );
+  const [invoiceModalData, setInvoiceModalData] = useState<Treatment | null>(
     null
   );
 
@@ -73,7 +77,6 @@ const Treatments = () => {
     actionColumn: {
       frozen: true,
       position: 'left',
-      width: 150,
     },
     pagination: {
       activePage: paginations.page,
@@ -114,6 +117,17 @@ const Treatments = () => {
       }),
       action: (): void => {
         setDeleteTreatmentId(rowData?._id);
+      },
+    }),
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'view',
+      text: 'Invoice',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.blue[9],
+        color: theme.colors.gray[0],
+      }),
+      action: (): void => {
+        setInvoiceModalData(rowData as Treatment);
       },
     }),
   ];
@@ -181,6 +195,12 @@ const Treatments = () => {
         title='Delete treatment'
         description='Are you sure you want to delete the treatment?'
         loading={deleteMutation.isLoading}
+      />
+      <TreatmentInvoice
+        title='Invoice'
+        data={invoiceModalData}
+        open={!!invoiceModalData}
+        onClose={() => {}}
       />
     </Box>
   );
