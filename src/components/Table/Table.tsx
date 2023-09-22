@@ -10,7 +10,7 @@ import './table.scss';
 export type columnRowType = { [key: string]: any };
 
 export interface TableProps {
-  columns: { key: string; name: string }[];
+  columns: { key: string; name: string; [key: string]: any }[];
   rows: { [key: string]: any }[];
   onRowClick?: (column: columnRowType, row: columnRowType) => void;
   onRowDoubleClick?: (column: columnRowType, row: columnRowType) => void;
@@ -22,6 +22,8 @@ export interface TableProps {
       frozen?: boolean;
       width?: number;
       position?: 'left' | 'right';
+      cellClass?: string;
+      cellWrap?: boolean;
     };
     pagination?: {
       activePage: number;
@@ -50,7 +52,14 @@ const Table = ({
 }: TableProps) => {
   const { colorScheme } = useMantineColorScheme();
 
-  let customColumns = [...columns];
+  let customColumns = columns?.map((column) => {
+    return {
+      ...column,
+      cellClass: `${column?.cellClass ? 'column?.cellClass' : ''} ${
+        column?.cellWrap ? 'enableCellWrapping' : ''
+      }`,
+    };
+  });
 
   if (actions) {
     const tableActions = [
@@ -59,6 +68,8 @@ const Table = ({
         name: 'Actions',
         frozen: options?.actionColumn?.frozen,
         width: options?.actionColumn?.width,
+        cellClass: options?.actionColumn?.cellClass ?? '',
+        cellWrap: options?.actionColumn?.cellWrap,
         headerRenderer: ({ column }: { column: columnRowType }) => column?.name,
         renderCell: ({ row }: { row: any }): JSX.Element => (
           <div className='tableGrid__actions'>

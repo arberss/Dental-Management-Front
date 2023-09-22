@@ -40,3 +40,11 @@
     }
   }
 }
+
+.enableCellWrapping {
+  display: inline-block;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  white-space: normal;
+  overflow-y: auto;
+}
