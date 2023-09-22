@@ -6,6 +6,8 @@ import TreatmentInvoice from '@/components/TreatmentInvoice/TreatmentInvoice';
 import { endpoints } from '@/config/endpoints';
 import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { usePagination } from '@/hooks/react-query/usePagination';
+import { useQuery } from '@/hooks/react-query/useQuery';
+import { IPatient } from '@/pages/Patient/patient.interface';
 import { Box, Flex, Text } from '@mantine/core';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
@@ -13,6 +15,11 @@ import { useParams } from 'react-router-dom';
 import AddTreatment from './Create/AddTreatment';
 import { Treatment } from './Create/index.interface';
 import { columns } from './helper';
+
+interface InvoiceData {
+  patient: IPatient;
+  treatment: Treatment;
+}
 
 const Treatments = () => {
   const queryClient = useQueryClient();
@@ -32,9 +39,10 @@ const Treatments = () => {
   const [deleteTreatmentId, setDeleteTreatmentId] = useState<null | string>(
     null
   );
-  const [invoiceModalData, setInvoiceModalData] = useState<Treatment | null>(
+  const [invoiceModalData, setInvoiceModalData] = useState<InvoiceData | null>(
     null
   );
+  const [openInvoiceModal, setOpenInvoiceModal] = useState<boolean>(false);
 
   const { data: treatments = [] } = usePagination<Treatment[]>(
     endpoints.patientTreatments.replace('::patientId', params?.patientId ?? ''),
@@ -42,6 +50,13 @@ const Treatments = () => {
       page: paginations.page,
       size: paginations.size,
     },
+    {
+      skip: !params?.patientId,
+    }
+  );
+
+  const { data: patient } = useQuery<IPatient>(
+    endpoints.patient.replace('::patientId', params?.patientId ?? ''),
     {
       skip: !params?.patientId,
     }
@@ -127,7 +142,11 @@ const Treatments = () => {
         color: theme.colors.gray[0],
       }),
       action: (): void => {
-        setInvoiceModalData(rowData as Treatment);
+        setInvoiceModalData({
+          patient: patient!,
+          treatment: rowData as Treatment,
+        });
+        setOpenInvoiceModal(true);
       },
     }),
   ];
@@ -199,8 +218,8 @@ const Treatments = () => {
       <TreatmentInvoice
         title='Invoice'
         data={invoiceModalData}
-        open={!!invoiceModalData}
-        onClose={() => {}}
+        open={openInvoiceModal}
+        onClose={() => setOpenInvoiceModal(false)}
       />
     </Box>
   );

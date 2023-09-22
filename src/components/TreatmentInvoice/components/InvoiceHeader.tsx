@@ -1,19 +1,13 @@
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-} from '@react-pdf/renderer';
-import FontRobotoBold from '../../../fonts/Roboto/Roboto-Bold.ttf';
-import FontRobotoRegular from '../../../fonts/Roboto/Roboto-Regular.ttf';
-import FontRobotoItalic from '../../../fonts/Roboto/Roboto-Italic.ttf';
+import { Text, View, StyleSheet } from '@react-pdf/renderer';
+import * as dayjs from 'dayjs';
 
 // Create styles
 const styles = StyleSheet.create({
-  headerWrapper: {
+  header: {
     width: '100%',
+    marginTop: 10,
+  },
+  headerWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -21,49 +15,68 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    marginVertical: 2,
+  },
+  headerTime: {
+    fontSize: 10,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
   },
   headerClinicName: {
-    fontSize: 14,
+    fontSize: 11,
     fontFamily: 'Roboto',
     marginVertical: 2,
   },
+  headerReportTitle: {
+    fontSize: 20,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 15,
+  },
 });
 
-const dentalName = import.meta.env.VITE_CLINIC_NAME;
+const {
+  VITE_CLINIC_NAME,
+  VITE_CLINIC_COUNTRY,
+  VITE_CLINIC_CITY,
+  VITE_CLINIC_STREET,
+  VITE_CLINIC_EMAIL,
+  VITE_CLINIC_NUMBER,
+} = import.meta.env;
 
-Font.register({
-  family: 'Roboto',
-  fonts: [
-    {
-      src: FontRobotoRegular,
-    },
-    {
-      src: FontRobotoBold,
-      fontWeight: 'bold',
-    },
-    {
-      src: FontRobotoItalic,
-      fontStyle: 'italic',
-    },
-  ],
-});
+interface InvoiceHeaderProps {
+  data: any;
+}
 
-const InvoiceHeader = () => {
+const InvoiceHeader = ({ data }: InvoiceHeaderProps) => {
   return (
-    <View style={styles.headerWrapper}>
-      <View>
-        <Text style={styles.headerClinicTitle}>{dentalName}</Text>
-        <Text style={styles.headerClinicName}>Dardani, Prishtine</Text>
-        <Text style={styles.headerClinicName}>tel no</Text>
-        <Text style={styles.headerClinicName}>test@test.com</Text>
+    <View>
+      <View style={styles.headerWrapper}>
+        <View>
+          <Text style={styles.headerClinicTitle}>{VITE_CLINIC_NAME}</Text>
+          <Text style={styles.headerClinicName}>
+            {VITE_CLINIC_STREET}, {VITE_CLINIC_CITY}
+          </Text>
+          <Text style={styles.headerClinicName}>{VITE_CLINIC_COUNTRY}</Text>
+          <Text style={styles.headerClinicName}>{VITE_CLINIC_NUMBER}</Text>
+          <Text style={styles.headerClinicName}>{VITE_CLINIC_EMAIL}</Text>
+        </View>
+        <View>
+          <Text
+            style={styles.headerClinicName}
+          >{`${data.patient.firstName} ${data.patient.lastName}`}</Text>
+          <Text style={styles.headerClinicName}>
+            {dayjs(data.patient.dateOfBirth).format('DD/MM/YYYY')}
+          </Text>
+          <Text style={styles.headerClinicName}>
+            {data.patient?.contactNumber}
+          </Text>
+          <Text
+            style={styles.headerClinicName}
+          >{`${data.patient.address.city}, ${data.patient.address.state}`}</Text>
+        </View>
       </View>
-      <View>
-        <Text style={styles.headerClinicTitle}>Invoice</Text>
-        <Text style={styles.headerClinicName}>Filan Fisteki</Text>
-        <Text style={styles.headerClinicName}>tel no</Text>
-        <Text style={styles.headerClinicName}>email</Text>
-      </View>
+      <Text style={styles.headerReportTitle}>RAPORTI I MJEKUT</Text>
     </View>
   );
 };
