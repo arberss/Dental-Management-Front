@@ -38,17 +38,7 @@ function Schedule() {
     }
   }, [isSuccess, JSON.stringify(data)]);
 
-  const dateClick = (data) => {
-    console.log('data', data);
-  };
-
-  const eventAdd = (event) => {
-    console.log('eventAdd', event);
-  };
-
-  const eventClick = (event) => {
-    console.log('event', event);
-
+  const eventClick = (event: any) => {
     const eventId = event.event.id;
     const selectedEvent = events.find((e) => e.id === eventId);
     const initialEvent = data?.find((e) => e._id === eventId);
@@ -84,8 +74,6 @@ function Schedule() {
           end: 'addEvent dayGridMonth,timeGridWeek,timeGridDay,listWeek', // will normally be on the right. if RTL, will be on the left
         }}
         height={'90vh'}
-        dateClick={dateClick}
-        eventAdd={eventAdd}
         eventClick={eventClick}
         nowIndicator
         events={events}
@@ -113,7 +101,7 @@ function Schedule() {
           hour: 'numeric',
           minute: '2-digit',
           meridiem: false,
-          hour12: false
+          hour12: false,
         }}
       />
       <AddEvent

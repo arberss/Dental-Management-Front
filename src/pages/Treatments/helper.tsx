@@ -10,6 +10,7 @@ export const columns = [
   {
     key: 'description',
     name: 'Description',
+    cellWrap: true
   },
   {
     key: 'patient',
