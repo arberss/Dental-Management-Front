@@ -4,7 +4,7 @@ import { usePagination } from '../react-query/usePagination';
 const useGetDoctorsList = () => {
   const { data: doctors, isLoading } = usePagination<{
     items: { _id: string; firstName: string; lastName: string }[];
-  }>(endpoints.doctors, {
+  }>(endpoints.doctorsDropdown, {
     page: 1,
     size: 10,
   });

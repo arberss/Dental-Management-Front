@@ -1,6 +1,6 @@
 import { endpoints } from '@/config/endpoints';
+import useGetDoctorsList from '@/hooks/custom/useGetDoctorsList';
 import { usePutMutation } from '@/hooks/react-query/useMutation';
-import { usePagination } from '@/hooks/react-query/usePagination';
 import { IPatient } from '@/pages/Patient/patient.interface';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
@@ -33,20 +33,7 @@ const AddPatient = ({
   const queryClient = useQueryClient();
   const editMode = !!selectedEditUser;
 
-  const { data: doctors } = usePagination<{
-    items: { _id: string; firstName: string; lastName: string }[];
-  }>(endpoints.doctors, {
-    page: 1,
-    size: 10,
-  });
-
-  const selectDoctorsData =
-    doctors?.items?.map((d) => {
-      return {
-        label: `${d.firstName} ${d.lastName}`,
-        value: d._id,
-      };
-    }) ?? [];
+  const { data: doctors } = useGetDoctorsList();
 
   const putMutation = usePutMutation(endpoints.addPatientTreatment);
   const putUpdateMutation = usePutMutation(endpoints.updatePatient);
@@ -280,7 +267,7 @@ const AddPatient = ({
                   <Grid.Col span={6}>
                     <Select
                       name='treatment.doctor'
-                      data={selectDoctorsData}
+                      data={doctors}
                       label='Doctor'
                       onChange={(value: string) =>
                         setFieldValue('treatment.doctor', value)
