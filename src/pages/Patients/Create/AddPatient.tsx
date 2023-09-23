@@ -5,11 +5,19 @@ import { IPatient } from '@/pages/Patient/patient.interface';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
 import Select from '@/shared-components/Form/Select/Select';
-import { Box, Button, Drawer, Flex, Grid, Text } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Drawer,
+  Flex,
+  Grid,
+  SelectItem,
+  Text,
+} from '@mantine/core';
 import { DatePickerInput, DateValue } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import {
   addPatientInitialValues,
@@ -33,7 +41,9 @@ const AddPatient = ({
   const queryClient = useQueryClient();
   const editMode = !!selectedEditUser;
 
-  const { data: doctors } = useGetDoctorsList();
+  const [search, setSearch] = useState('');
+
+  const { data: doctors } = useGetDoctorsList({ search });
 
   const putMutation = usePutMutation(endpoints.addPatientTreatment);
   const putUpdateMutation = usePutMutation(endpoints.updatePatient);
@@ -84,6 +94,11 @@ const AddPatient = ({
   const handleClose = () => {
     onClose();
     resetForm();
+  };
+
+  const onDoctorFilter = (value: string, _selectedItem: SelectItem) => {
+    setSearch(value);
+    return true;
   };
 
   return (
@@ -276,6 +291,7 @@ const AddPatient = ({
                       searchable={true}
                       dropdownPosition='bottom'
                       error={errors?.treatment?.doctor}
+                      filter={onDoctorFilter}
                     />
                   </Grid.Col>
                 </Grid>

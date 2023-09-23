@@ -1,4 +1,4 @@
-import { Select as MantineSelect, Sx } from '@mantine/core';
+import { Select as MantineSelect, SelectItem, Sx } from '@mantine/core';
 
 interface SelectProps {
   name: string;
@@ -13,6 +13,7 @@ interface SelectProps {
   disabled?: boolean;
   dropdownPosition?: 'bottom' | 'top' | 'flip' | undefined;
   sx?: Sx;
+  filter?: (value: string, item: SelectItem) => boolean;
 }
 
 const Select = ({
@@ -28,6 +29,7 @@ const Select = ({
   disabled,
   sx,
   dropdownPosition,
+  filter,
 }: SelectProps) => {
   return (
     <MantineSelect
@@ -43,6 +45,7 @@ const Select = ({
       disabled={disabled}
       sx={sx}
       dropdownPosition={dropdownPosition}
+      filter={filter}
     />
   );
 };

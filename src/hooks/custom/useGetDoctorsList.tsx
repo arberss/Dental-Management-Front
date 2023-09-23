@@ -1,12 +1,20 @@
 import { endpoints } from '@/config/endpoints';
 import { usePagination } from '../react-query/usePagination';
+import useDebounce from './useDebounce';
 
-const useGetDoctorsList = () => {
+interface UseGetDoctorsListProps {
+  search: string;
+}
+
+const useGetDoctorsList = ({ search }: UseGetDoctorsListProps) => {
+  const debouncedSearch = useDebounce(search, 500);
+
   const { data: doctors, isLoading } = usePagination<{
     items: { _id: string; firstName: string; lastName: string }[];
   }>(endpoints.doctorsDropdown, {
     page: 1,
     size: 10,
+    search: debouncedSearch,
   });
 
   const selectDoctorsData =
