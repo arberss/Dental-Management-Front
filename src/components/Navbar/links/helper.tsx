@@ -12,6 +12,7 @@ export interface LinkDataProps {
   label: string;
   to: string;
   onClick?: (e: React.MouseEvent) => void;
+  roles?: string[];
 }
 
 export const linkData: LinkDataProps[] = [
@@ -20,23 +21,27 @@ export const linkData: LinkDataProps[] = [
     color: 'blue',
     label: 'Patients',
     to: '/patients',
+    roles: ['admin', 'doctor'],
   },
   {
     icon: <IconReportMedical size={20} color='orange' />,
     color: 'blue',
     label: 'Treatments',
     to: '/treatments',
+    roles: ['admin', 'doctor'],
   },
   {
     icon: <IconUser size={20} />,
     color: 'blue',
     label: 'Doctors',
     to: '/doctors',
+    roles: ['admin'],
   },
   {
     icon: <IconCalendar size={20} />,
     color: 'blue',
     label: 'Schedules',
     to: '/schedules',
+    roles: ['admin', 'doctor'],
   },
 ];
