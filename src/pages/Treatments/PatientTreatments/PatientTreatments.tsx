@@ -14,7 +14,7 @@ import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AddTreatment from './Create/AddTreatment';
 import { Treatment } from './Create/index.interface';
-import { columns } from './helper';
+import { columns } from './patientTreatments.helper';
 
 interface InvoiceData {
   patient: IPatient;

@@ -6,7 +6,7 @@ import { endpoints } from '@/config/endpoints';
 import { usePagination } from '@/hooks/react-query/usePagination';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { columns } from './helper';
+import { columns } from './createPatient.helper';
 import { IconUsers } from '@tabler/icons-react';
 import { Flex } from '@mantine/core';
 import { useQuery } from '@/hooks/react-query/useQuery';

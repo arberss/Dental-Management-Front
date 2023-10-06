@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
-import { IAddPationFields } from './index.interface';
+import { IAddPationFields } from './addPatient.interface';
 
 export const validationSchema = Yup.object({
   firstName: Yup.string().required('First Name is required'),

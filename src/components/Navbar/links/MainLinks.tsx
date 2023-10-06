@@ -1,5 +1,5 @@
 import MainLink from "./MainLink";
-import { LinkDataProps } from "./helper";
+import { LinkDataProps } from "./mainLink.helper";
 
 interface MainLinksProps {
   linkData: LinkDataProps[];

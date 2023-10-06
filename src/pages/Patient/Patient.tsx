@@ -15,7 +15,7 @@ import Treatments from '../Treatments/PatientTreatments/PatientTreatments';
 import Loader from '@/components/Loader/Loader';
 import { IPatient } from './patient.interface';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
-import { cardsInfo } from './helper';
+import { cardsInfo } from './patient.helper';
 import { useState } from 'react';
 import AddPatient from '../Patients/Create/AddPatient';
 

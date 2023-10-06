@@ -1,22 +1,45 @@
 import AppShellLayout from '@/components/AppShell/AppShell';
-import { linkData } from '@/components/Navbar/links/helper';
 import AuthContext from '@/context/authContext';
+import { routes } from '@/routes/routes.helper';
 import { useContext, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import {
+  Outlet,
+  useNavigate,
+  matchRoutes,
+  useLocation,
+} from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const matchRoutesResult = matchRoutes(routes, location);
 
   const { user, isAuth } = useContext(AuthContext);
-  const linkDataObject = linkData.find((link) =>
-    link.roles?.some((item) => user?.roles.includes(item))
+  const linkDataObject = routes.find(
+    (link) =>
+      link.roles?.some((item) => user?.roles.includes(item)) &&
+      !link.path.includes('/:')
   );
 
-  useEffect(() => {
-    if (isAuth && linkDataObject) {
-      navigate(linkDataObject?.to);
+  const checkIfCanVisit = routes.find((link) => {
+    const findRoute =
+      matchRoutesResult && link.path === matchRoutesResult[0].route.path;
+
+    if (findRoute) {
+      return link.roles?.find((role) => {
+        return user?.roles.includes(role);
+      });
     }
-  }, [isAuth]);
+
+    return null;
+  });
+
+  useEffect(() => {
+    if (isAuth && linkDataObject && !checkIfCanVisit) {
+      navigate(linkDataObject?.path);
+    }
+  }, [isAuth, checkIfCanVisit, linkDataObject]);
 
   return (
     <AppShellLayout>

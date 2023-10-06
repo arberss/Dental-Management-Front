@@ -4,7 +4,7 @@ import {
   Pagination as MantinePagination,
   useMantineColorScheme,
 } from '@mantine/core';
-import { calculatePages, sizeFilter } from './helper';
+import { calculatePages, sizeFilter } from './pagination.helper';
 import './pagination.scss';
 
 interface PaginationProps {

@@ -16,7 +16,7 @@ import {
 import { useFormik } from 'formik';
 import { ChangeEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { validationSchema } from './helper';
+import { validationSchema } from './addTreatment.helper';
 import { IAddPatientTreatment, Treatment } from './index.interface';
 
 interface AddPatientProps {

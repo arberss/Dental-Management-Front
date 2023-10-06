@@ -6,7 +6,7 @@ import { usePagination } from '@/hooks/react-query/usePagination';
 import Input from '@/shared-components/Form/Input/Input';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
 import { Flex } from '@mantine/core';
-import { columns } from './helper';
+import { columns } from './treatments.helper';
 import { Treatment } from './PatientTreatments/Create/index.interface';
 import { IconReportMedical } from '@tabler/icons-react';
 import Card from '@/components/Card/Card';

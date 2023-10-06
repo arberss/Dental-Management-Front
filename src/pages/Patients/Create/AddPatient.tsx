@@ -23,7 +23,7 @@ import {
   addPatientInitialValues,
   validationEditSchema,
   validationSchema,
-} from './helper';
+} from './addPatient.helper';
 
 interface AddPatientProps {
   opened: boolean;
