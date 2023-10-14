@@ -10,6 +10,7 @@ import { Box } from '@mantine/core';
 import AddEvent from './components/AddEvent/AddEvent';
 import { eventColor, ISchedule } from './components/AddEvent/helper';
 import dayjs from 'dayjs';
+import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
 
 function Schedule() {
   const [events, setEvents] = useState<Record<string, any>[]>([]);
@@ -58,59 +59,66 @@ function Schedule() {
   };
 
   return (
-    <Box
-      sx={(theme) => ({
-        border: `1px solid ${theme.colors.gray[8]}`,
-        borderRadius: theme.radius.md,
-        padding: '10px',
-      })}
-    >
-      <Fullcalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-        initialView={'timeGridDay'}
-        headerToolbar={{
-          start: 'today prev,next', // will normally be on the left. if RTL, will be on the right
-          center: 'title',
-          end: 'addEvent dayGridMonth,timeGridWeek,timeGridDay,listWeek', // will normally be on the right. if RTL, will be on the left
-        }}
-        height={'90vh'}
-        eventClick={eventClick}
-        nowIndicator
-        events={events}
-        allDaySlot={false}
-        customButtons={{
-          addEvent: {
-            text: 'Add',
-            click: function () {
-              setOpenEventModal(true);
+    <RightContent>
+      <Box
+        sx={(theme) => ({
+          border: `1px solid ${theme.colors.gray[8]}`,
+          borderRadius: theme.radius.md,
+          padding: '10px',
+        })}
+      >
+        <Fullcalendar
+          plugins={[
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin,
+            listPlugin,
+          ]}
+          initialView={'timeGridDay'}
+          headerToolbar={{
+            start: 'today prev,next', // will normally be on the left. if RTL, will be on the right
+            center: 'title',
+            end: 'addEvent dayGridMonth,timeGridWeek,timeGridDay,listWeek', // will normally be on the right. if RTL, will be on the left
+          }}
+          height={'90vh'}
+          eventClick={eventClick}
+          nowIndicator
+          events={events}
+          allDaySlot={false}
+          customButtons={{
+            addEvent: {
+              text: 'Add',
+              click: function () {
+                setOpenEventModal(true);
+              },
             },
-          },
-        }}
-        eventMaxStack={3}
-        // slotEventOverlap={false}
-        slotLabelFormat={[
-          {
+          }}
+          eventMaxStack={3}
+          // slotEventOverlap={false}
+          slotLabelFormat={[
+            {
+              hour: 'numeric',
+              minute: '2-digit',
+              omitZeroMinute: true,
+              meridiem: 'short',
+              hour12: false,
+            },
+          ]}
+          eventTimeFormat={{
             hour: 'numeric',
             minute: '2-digit',
-            omitZeroMinute: true,
-            meridiem: 'short',
+            meridiem: false,
             hour12: false,
-          },
-        ]}
-        eventTimeFormat={{
-          hour: 'numeric',
-          minute: '2-digit',
-          meridiem: false,
-          hour12: false,
-        }}
-      />
-      <AddEvent
-        title={clickedEvent ? 'Update Event' : 'Add Event'}
-        opened={clickedEvent ? !!clickedEvent : openEventModal}
-        onClose={closeEventModal}
-        selectedEvent={clickedEvent as ISchedule}
-      />
-    </Box>
+          }}
+        />
+        <AddEvent
+          title={clickedEvent ? 'Update Event' : 'Add Event'}
+          opened={clickedEvent ? !!clickedEvent : openEventModal}
+          onClose={closeEventModal}
+          selectedEvent={clickedEvent as ISchedule}
+        />
+      </Box>
+    </RightContent>
   );
 }
 

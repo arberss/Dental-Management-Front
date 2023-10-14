@@ -66,7 +66,7 @@ const AddEvent = ({ opened, title, onClose, selectedEvent }: AddEventProps) => {
       const error = postMutate.isError ? postMutate.error : putMutate.error;
       toast({
         status: 'error',
-        title: error?.response.data.message,
+        title: error?.response?.data?.message,
       });
     }
   }, [

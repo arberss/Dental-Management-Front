@@ -166,7 +166,7 @@ const Treatments = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center' my='xs'>
+          <Flex justify='space-between' align='center' my='xs' gap='md'>
             <Input
               name='treatmentSearch'
               value={searchTreatment}

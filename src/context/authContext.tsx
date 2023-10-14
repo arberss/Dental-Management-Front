@@ -11,6 +11,7 @@ interface IAuthContext {
   setIsAuth: (_value: boolean) => void;
   handleLogout: () => void;
   user: User | null;
+  loading: boolean;
 }
 
 export interface User {
@@ -21,6 +22,7 @@ export interface User {
   roles: string[];
   patients: IPatient[];
   createdAt: Date;
+  status: 'verified' | 'pending';
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -30,6 +32,7 @@ const AuthContext = createContext<IAuthContext>({
   setIsAuth: (_value: boolean) => {},
   handleLogout: () => {},
   user: null,
+  loading: true,
 });
 
 export const AuthContextProvider = ({
@@ -42,6 +45,7 @@ export const AuthContextProvider = ({
   const [isAuth, setIsAuth] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const handleLogin = (token: string) => {
     localStorage.setItem('dental-token', token);
@@ -55,6 +59,8 @@ export const AuthContextProvider = ({
     if (response?.data) {
       setUser(response.data);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -79,6 +85,7 @@ export const AuthContextProvider = ({
         handleLogin,
         handleLogout,
         user,
+        loading,
       }}
     >
       {children}

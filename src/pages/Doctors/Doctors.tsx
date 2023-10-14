@@ -112,7 +112,7 @@ const Doctors = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center'>
+          <Flex justify='space-between' align='center' gap="md">
             <Input
               name='doctorSearch'
               value={searchDoctor}

@@ -135,7 +135,7 @@ const Patients = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center'>
+          <Flex justify='space-between' align='center' gap="md">
             <Input
               name='patientSearch'
               value={searchPatient}
