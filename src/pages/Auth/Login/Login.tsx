@@ -9,6 +9,7 @@ import { usePostMutation } from '@/hooks/react-query/useMutation';
 import { endpoints } from '@/config/endpoints';
 import AuthContext from '@/context/authContext';
 import { useContext } from 'react';
+import toast from '@/shared-components/toast/Toast';
 
 export interface LoginFormData {
   email: string;
@@ -42,6 +43,9 @@ const Login = () => {
 
             formikHelpers.resetForm();
             navigate('/');
+          },
+          onError: (error) => {
+            toast({ status: 'error', title: error?.response?.data?.message });
           },
         });
       } catch (error) {

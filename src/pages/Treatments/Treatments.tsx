@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Loader from '@/components/Loader/Loader';
 import Table, { TableProps } from '@/components/Table/Table';
 import { endpoints } from '@/config/endpoints';
@@ -16,9 +16,11 @@ import ConfirmModal from '@/components/ConfirmModal/ConfirmModal';
 import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { useQueryClient } from 'react-query';
 import AddTreatment from './PatientTreatments/Create/AddTreatment';
+import AuthContext from '@/context/authContext';
 
 const Treatments = () => {
   const queryClient = useQueryClient();
+  const { user } = useContext(AuthContext);
 
   const [paginations, setPaginations] = useState<IPagination>({
     page: 1,
@@ -103,6 +105,7 @@ const Treatments = () => {
     ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
       type: 'delete',
       text: 'Delete',
+      hidden: !user?.roles?.find((role) => ['admin'].includes(role)),
       sx: (theme) => ({
         backgroundColor: theme.colors.orange[9],
         color: theme.colors.gray[0],
@@ -169,6 +172,15 @@ const Treatments = () => {
               value={searchTreatment}
               onChange={handleSearchTreatment}
               placeholder='Search'
+              sx={{
+                width: '100%',
+              }}
+              styles={{
+                input: {
+                  maxWidth: '250px',
+                  width: '100%',
+                },
+              }}
             />
           </Flex>
           <Table

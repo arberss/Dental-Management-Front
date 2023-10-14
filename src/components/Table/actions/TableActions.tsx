@@ -3,6 +3,7 @@ import { Button, Sx } from '@mantine/core';
 export interface Actions {
   type: 'edit' | 'delete' | string;
   disabled?: boolean;
+  hidden?: boolean;
   icon?: string;
   svgComponent?: any;
   text: string;
@@ -18,13 +19,16 @@ export type Props<T = any> = {
 const ColumnActions = <T extends unknown>(props: Props<T>): JSX.Element => {
   const { rowData, actions } = props;
 
-  const renderActions = (): JSX.Element[] =>
+  const renderActions = (): (JSX.Element | null)[] =>
     actions?.map(
       (
         item: ({ rowData }: { rowData?: T }) => void,
         index: number
-      ): JSX.Element => {
+      ): JSX.Element | null => {
         const element = item({ rowData }) as Actions | void;
+
+        if (element?.hidden) return null;
+
         return (
           <Button
             disabled={element?.disabled}

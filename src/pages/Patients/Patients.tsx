@@ -141,6 +141,15 @@ const Patients = () => {
               value={searchPatient}
               onChange={handleSearchPatient}
               placeholder='Search'
+              sx={{
+                width: '100%',
+              }}
+              styles={{
+                input: {
+                  maxWidth: '250px',
+                  width: '100%',
+                },
+              }}
             />
             <TableTopActions
               title='Add Patient'

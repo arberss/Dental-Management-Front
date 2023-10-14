@@ -4,12 +4,13 @@ import Table, { TableProps } from '@/components/Table/Table';
 import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import TreatmentInvoice from '@/components/TreatmentInvoice/TreatmentInvoice';
 import { endpoints } from '@/config/endpoints';
+import AuthContext from '@/context/authContext';
 import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { usePagination } from '@/hooks/react-query/usePagination';
 import { useQuery } from '@/hooks/react-query/useQuery';
 import { IPatient } from '@/pages/Patient/patient.interface';
 import { Box, Flex, Text } from '@mantine/core';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import AddTreatment from './Create/AddTreatment';
@@ -24,6 +25,7 @@ interface InvoiceData {
 const Treatments = () => {
   const queryClient = useQueryClient();
   const params: Readonly<{ patientId?: string }> = useParams();
+  const { user } = useContext(AuthContext);
 
   const [paginations, setPaginations] = useState({
     page: 1,
@@ -126,6 +128,7 @@ const Treatments = () => {
     ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
       type: 'delete',
       text: 'Delete',
+      hidden: !user?.roles?.find((role) => ['admin'].includes(role)),
       sx: (theme) => ({
         backgroundColor: theme.colors.orange[9],
         color: theme.colors.gray[0],

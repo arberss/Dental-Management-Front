@@ -1,4 +1,4 @@
-import { Sx, TextInput } from '@mantine/core';
+import { Styles, Sx, TextInput, TextInputStylesNames } from '@mantine/core';
 import React from 'react';
 
 interface InputProps {
@@ -14,6 +14,7 @@ interface InputProps {
   defaultValue?: string;
   type?: string;
   sx?: Sx;
+  styles?: Styles<TextInputStylesNames, Record<string, any>>;
 }
 
 const Input = (props: InputProps) => {
@@ -29,6 +30,7 @@ const Input = (props: InputProps) => {
     type = 'text',
     defaultValue,
     sx,
+    styles,
   } = props;
 
   return (
@@ -44,6 +46,7 @@ const Input = (props: InputProps) => {
       defaultValue={defaultValue}
       type={type}
       sx={sx}
+      styles={styles}
     />
   );
 };
