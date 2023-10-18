@@ -7,13 +7,21 @@ import Loader from '@/components/Loader/Loader';
 import { IPatient } from './patient.interface';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import { cardsInfo } from './patient.helper';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import AddPatient from '../Patients/Create/AddPatient';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
+import useCheckRole from '@/hooks/custom/useCheckRole';
+import AuthContext from '@/context/authContext';
 
 const Patient = () => {
   const params: Readonly<{ patientId?: string }> = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  const checkRole = useCheckRole({
+    roles: ['admin'],
+    userRoles: user?.roles,
+  });
 
   const [editPatientDrawerOpened, setEditPatientDrawerOpened] = useState(false);
 
@@ -40,18 +48,26 @@ const Patient = () => {
     <>
       <RightContent>
         <>
-          <Flex justify='space-between' align='center' gap='xs' wrap='wrap' mb="xs">
+          <Flex
+            justify='space-between'
+            align='center'
+            gap='xs'
+            wrap='wrap'
+            mb='xs'
+          >
             <Breadcrumbs items={items} />
-            <Button
-              variant='white'
-              sx={(theme) => ({
-                backgroundColor: theme.colors.yellow[4],
-                color: theme.colors.dark[8],
-              })}
-              onClick={() => setEditPatientDrawerOpened(true)}
-            >
-              Edit Patient
-            </Button>
+            {checkRole ? (
+              <Button
+                variant='white'
+                sx={(theme) => ({
+                  backgroundColor: theme.colors.yellow[4],
+                  color: theme.colors.dark[8],
+                })}
+                onClick={() => setEditPatientDrawerOpened(true)}
+              >
+                Edit Patient
+              </Button>
+            ) : null}
           </Flex>
           <Grid gutter='sm'>
             <Grid.Col sm={4} md={6} lg={3} xl={4}>

@@ -17,6 +17,13 @@ import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { useQueryClient } from 'react-query';
 import AddTreatment from './PatientTreatments/Create/AddTreatment';
 import AuthContext from '@/context/authContext';
+import TreatmentInvoice from '@/components/TreatmentInvoice/TreatmentInvoice';
+import { IPatient } from '../Patient/patient.interface';
+
+interface InvoiceData {
+  patient: IPatient;
+  treatment: Treatment;
+}
 
 const Treatments = () => {
   const queryClient = useQueryClient();
@@ -34,6 +41,10 @@ const Treatments = () => {
   const [deleteTreatmentId, setDeleteTreatmentId] = useState<null | string>(
     null
   );
+  const [invoiceModalData, setInvoiceModalData] = useState<InvoiceData | null>(
+    null
+  );
+  const [openInvoiceModal, setOpenInvoiceModal] = useState<boolean>(false);
 
   const { data, isLoading, isSuccess } = usePagination<{
     items: Treatment[];
@@ -112,6 +123,21 @@ const Treatments = () => {
       }),
       action: (): void => {
         setDeleteTreatmentId(rowData?._id);
+      },
+    }),
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'view',
+      text: 'Invoice',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.blue[9],
+        color: theme.colors.gray[0],
+      }),
+      action: (): void => {
+        setInvoiceModalData({
+          patient: rowData?.patient!,
+          treatment: rowData as Treatment,
+        });
+        setOpenInvoiceModal(true);
       },
     }),
   ];
@@ -205,6 +231,12 @@ const Treatments = () => {
         title='Delete treatment'
         description='Are you sure you want to delete the treatment?'
         loading={deleteMutation.isLoading}
+      />
+      <TreatmentInvoice
+        title='Invoice'
+        data={invoiceModalData}
+        open={openInvoiceModal}
+        onClose={() => setOpenInvoiceModal(false)}
       />
     </>
   );

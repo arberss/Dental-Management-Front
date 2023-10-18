@@ -3,7 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@/hooks/react-query/useQuery';
 import { endpoints } from '@/config/endpoints';
 import { Box } from '@mantine/core';
@@ -11,6 +11,8 @@ import AddEvent from './components/AddEvent/AddEvent';
 import { eventColor, ISchedule } from './components/AddEvent/helper';
 import dayjs from 'dayjs';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
+import AuthContext from '@/context/authContext';
+import useCheckRole from '@/hooks/custom/useCheckRole';
 
 function Schedule() {
   const [events, setEvents] = useState<Record<string, any>[]>([]);
@@ -18,6 +20,15 @@ function Schedule() {
   const [clickedEvent, setClickedEvent] = useState<Record<string, any> | null>(
     null
   );
+
+  const { user, loading } = useContext(AuthContext);
+
+  let checkRole = loading
+    ? false
+    : useCheckRole({
+        roles: ['admin'],
+        userRoles: user?.roles,
+      });
 
   const { data, isSuccess } = useQuery<any[]>(endpoints.getSchedulers);
 
@@ -78,21 +89,27 @@ function Schedule() {
           headerToolbar={{
             start: 'today prev,next', // will normally be on the left. if RTL, will be on the right
             center: 'title',
-            end: 'addEvent dayGridMonth,timeGridWeek,timeGridDay,listWeek', // will normally be on the right. if RTL, will be on the left
+            end: `${
+              checkRole ? 'addEvent ' : ''
+            }dayGridMonth,timeGridWeek,timeGridDay,listWeek`, // will normally be on the right. if RTL, will be on the left
           }}
           height={'90vh'}
           eventClick={eventClick}
           nowIndicator
           events={events}
           allDaySlot={false}
-          customButtons={{
-            addEvent: {
-              text: 'Add',
-              click: function () {
-                setOpenEventModal(true);
-              },
-            },
-          }}
+          customButtons={
+            checkRole
+              ? {
+                  addEvent: {
+                    text: 'Add',
+                    click: function () {
+                      setOpenEventModal(true);
+                    },
+                  },
+                }
+              : undefined
+          }
           eventMaxStack={3}
           // slotEventOverlap={false}
           slotLabelFormat={[
