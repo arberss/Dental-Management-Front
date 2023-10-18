@@ -3,12 +3,13 @@ import { Button, Flex, PasswordInput } from '@mantine/core';
 import AuthLayout from '@/shared-components/Layouts/Auth/AuthLayout';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { validationSchema } from './helper';
+import { validationSchema } from './login.helper';
 import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import { usePostMutation } from '@/hooks/react-query/useMutation';
 import { endpoints } from '@/config/endpoints';
 import AuthContext from '@/context/authContext';
 import { useContext } from 'react';
+import toast from '@/shared-components/toast/Toast';
 
 export interface LoginFormData {
   email: string;
@@ -42,6 +43,9 @@ const Login = () => {
 
             formikHelpers.resetForm();
             navigate('/');
+          },
+          onError: (error) => {
+            toast({ status: 'error', title: error?.response?.data?.message });
           },
         });
       } catch (error) {

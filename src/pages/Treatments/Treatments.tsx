@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Loader from '@/components/Loader/Loader';
 import Table, { TableProps } from '@/components/Table/Table';
 import { endpoints } from '@/config/endpoints';
@@ -6,7 +6,7 @@ import { usePagination } from '@/hooks/react-query/usePagination';
 import Input from '@/shared-components/Form/Input/Input';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
 import { Flex } from '@mantine/core';
-import { columns } from './helper';
+import { columns } from './treatments.helper';
 import { Treatment } from './PatientTreatments/Create/index.interface';
 import { IconReportMedical } from '@tabler/icons-react';
 import Card from '@/components/Card/Card';
@@ -16,9 +16,18 @@ import ConfirmModal from '@/components/ConfirmModal/ConfirmModal';
 import { useDeleteMutation } from '@/hooks/react-query/useMutation';
 import { useQueryClient } from 'react-query';
 import AddTreatment from './PatientTreatments/Create/AddTreatment';
+import AuthContext from '@/context/authContext';
+import TreatmentInvoice from '@/components/TreatmentInvoice/TreatmentInvoice';
+import { IPatient } from '../Patient/patient.interface';
+
+interface InvoiceData {
+  patient: IPatient;
+  treatment: Treatment;
+}
 
 const Treatments = () => {
   const queryClient = useQueryClient();
+  const { user } = useContext(AuthContext);
 
   const [paginations, setPaginations] = useState<IPagination>({
     page: 1,
@@ -32,6 +41,10 @@ const Treatments = () => {
   const [deleteTreatmentId, setDeleteTreatmentId] = useState<null | string>(
     null
   );
+  const [invoiceModalData, setInvoiceModalData] = useState<InvoiceData | null>(
+    null
+  );
+  const [openInvoiceModal, setOpenInvoiceModal] = useState<boolean>(false);
 
   const { data, isLoading, isSuccess } = usePagination<{
     items: Treatment[];
@@ -103,12 +116,28 @@ const Treatments = () => {
     ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
       type: 'delete',
       text: 'Delete',
+      hidden: !user?.roles?.find((role) => ['admin'].includes(role)),
       sx: (theme) => ({
         backgroundColor: theme.colors.orange[9],
         color: theme.colors.gray[0],
       }),
       action: (): void => {
         setDeleteTreatmentId(rowData?._id);
+      },
+    }),
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'view',
+      text: 'Invoice',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.blue[9],
+        color: theme.colors.gray[0],
+      }),
+      action: (): void => {
+        setInvoiceModalData({
+          patient: rowData?.patient!,
+          treatment: rowData as Treatment,
+        });
+        setOpenInvoiceModal(true);
       },
     }),
   ];
@@ -163,12 +192,21 @@ const Treatments = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center' my='xs'>
+          <Flex justify='space-between' align='center' my='xs' gap='md'>
             <Input
               name='treatmentSearch'
               value={searchTreatment}
               onChange={handleSearchTreatment}
               placeholder='Search'
+              sx={{
+                width: '100%',
+              }}
+              styles={{
+                input: {
+                  maxWidth: '250px',
+                  width: '100%',
+                },
+              }}
             />
           </Flex>
           <Table
@@ -193,6 +231,12 @@ const Treatments = () => {
         title='Delete treatment'
         description='Are you sure you want to delete the treatment?'
         loading={deleteMutation.isLoading}
+      />
+      <TreatmentInvoice
+        title='Invoice'
+        data={invoiceModalData}
+        open={openInvoiceModal}
+        onClose={() => setOpenInvoiceModal(false)}
       />
     </>
   );

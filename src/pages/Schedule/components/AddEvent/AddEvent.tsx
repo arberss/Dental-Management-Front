@@ -7,10 +7,10 @@ import {
 import Input from '@/shared-components/Form/Input/Input';
 import Select from '@/shared-components/Form/Select/Select';
 import toast from '@/shared-components/toast/Toast';
-import { Box, Button, Drawer, Flex, Grid } from '@mantine/core';
+import { Box, Button, Drawer, Flex, Grid, SelectItem } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useFormik } from 'formik';
-import { ChangeEvent, ReactNode, useEffect } from 'react';
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import {
   initialValues,
@@ -30,7 +30,9 @@ const AddEvent = ({ opened, title, onClose, selectedEvent }: AddEventProps) => {
   const queryClient = useQueryClient();
   const editMode = !!selectedEvent;
 
-  const { data: doctors } = useGetDoctorsList();
+  const [search, setSearch] = useState('');
+
+  const { data: doctors } = useGetDoctorsList({ search });
 
   const postMutate = usePostMutation(endpoints.addScheduler);
   const putMutate = usePutMutation(endpoints.updateScheduler);
@@ -64,7 +66,7 @@ const AddEvent = ({ opened, title, onClose, selectedEvent }: AddEventProps) => {
       const error = postMutate.isError ? postMutate.error : putMutate.error;
       toast({
         status: 'error',
-        title: error?.response.data.message,
+        title: error?.response?.data?.message,
       });
     }
   }, [
@@ -77,6 +79,11 @@ const AddEvent = ({ opened, title, onClose, selectedEvent }: AddEventProps) => {
   const handleClose = () => {
     onClose();
     resetForm();
+  };
+
+  const onDoctorFilter = (value: string, _selectedItem: SelectItem) => {
+    setSearch(value);
+    return true;
   };
 
   return (
@@ -152,6 +159,7 @@ const AddEvent = ({ opened, title, onClose, selectedEvent }: AddEventProps) => {
                   searchable={true}
                   dropdownPosition='bottom'
                   error={errors?.doctor}
+                  filter={onDoctorFilter}
                 />
               </Grid.Col>
             </Grid>

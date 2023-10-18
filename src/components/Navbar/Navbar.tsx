@@ -1,8 +1,8 @@
 import { Navbar as MantineNavbar } from '@mantine/core';
-import { linkData, LinkDataProps } from './links/helper';
+import { linkData, LinkDataProps } from './links/mainLink.helper';
 import MainLinks from './links/MainLinks';
 import NavbarHeader from './NavbarHeader';
-import { IconLogout } from '@tabler/icons-react';
+import { IconLogout, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '@/context/authContext';
 import { useContext } from 'react';
@@ -16,6 +16,12 @@ const Navbar = ({ isOpen }: NavbarProps) => {
   const { handleLogout } = useContext(AuthContext);
 
   const linkDataFooter: LinkDataProps[] = [
+    {
+      icon: <IconUser size={20} />,
+      color: 'green',
+      label: 'Profile',
+      to: '/profile',
+    },
     {
       icon: <IconLogout size={20} />,
       color: 'orange',
@@ -53,10 +59,10 @@ const Navbar = ({ isOpen }: NavbarProps) => {
       <MantineNavbar.Section>
         <NavbarHeader title='Dental Management' />
       </MantineNavbar.Section>
-      <MantineNavbar.Section grow mt='xl' p="sm">
+      <MantineNavbar.Section grow mt='xl' p='sm'>
         <MainLinks linkData={linkData} />
       </MantineNavbar.Section>
-      <MantineNavbar.Section mt='xl' p="sm">
+      <MantineNavbar.Section mt='xl' p='sm'>
         <MainLinks linkData={linkDataFooter} />
       </MantineNavbar.Section>
     </MantineNavbar>

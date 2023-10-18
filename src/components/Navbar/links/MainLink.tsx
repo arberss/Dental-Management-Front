@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import NavLink from '@/shared-components/NavLink/NavLink';
 import { ThemeIcon, UnstyledButton, Group, Text } from '@mantine/core';
+import AuthContext from '@/context/authContext';
+import useCheckRole from '@/hooks/custom/useCheckRole';
 
 interface MainLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
   to: string;
+  roles?: string[];
   onClick?: (e: React.MouseEvent) => void;
 }
 
-function MainLink({ icon, color, label, to, onClick }: MainLinkProps) {
+function MainLink({ icon, color, label, to, onClick, roles }: MainLinkProps) {
+  const { user } = useContext(AuthContext);
+
+  const checkRole = useCheckRole({ roles, userRoles: user?.roles });
+  if (!checkRole || !user) return null;
+
   return (
     <NavLink to={to}>
       <UnstyledButton

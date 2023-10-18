@@ -4,11 +4,19 @@ import { usePutMutation } from '@/hooks/react-query/useMutation';
 import Input from '@/shared-components/Form/Input/Input';
 import NumberInput from '@/shared-components/Form/Input/NumberInput';
 import Select from '@/shared-components/Form/Select/Select';
-import { Box, Button, Drawer, Flex, Grid, Textarea } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Drawer,
+  Flex,
+  Grid,
+  SelectItem,
+  Textarea,
+} from '@mantine/core';
 import { useFormik } from 'formik';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { validationSchema } from './helper';
+import { validationSchema } from './addTreatment.helper';
 import { IAddPatientTreatment, Treatment } from './index.interface';
 
 interface AddPatientProps {
@@ -31,7 +39,9 @@ const AddTreatment = ({
   const params: Readonly<{ patientId?: string }> = useParams();
   const editMode = !!selectedData;
 
-  const { data: doctors } = useGetDoctorsList();
+  const [search, setSearch] = useState('');
+
+  const { data: doctors } = useGetDoctorsList({ search });
 
   const putMutation = usePutMutation(endpoints.addPatientTreatment);
   const putMutationUpdate = usePutMutation(endpoints.updateTreatment);
@@ -88,6 +98,11 @@ const AddTreatment = ({
   const handleClose = () => {
     onClose();
     resetForm();
+  };
+
+  const onDoctorFilter = (value: string, _selectedItem: SelectItem) => {
+    setSearch(value);
+    return true;
   };
 
   return (
@@ -158,6 +173,7 @@ const AddTreatment = ({
                   searchable={true}
                   dropdownPosition='bottom'
                   error={errors?.doctor}
+                  filter={onDoctorFilter}
                 />
               </Grid.Col>
             </Grid>

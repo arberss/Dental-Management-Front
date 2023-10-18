@@ -11,7 +11,7 @@ const localColorScheme = localStorage.getItem(
 ) as ColorScheme;
 
 function App() {
-  const { isAuth, handleLogout } = useContext(AuthContext);
+  const { isAuth, setIsAuth, handleLogout } = useContext(AuthContext);
 
   const [colorScheme, setColorScheme] = useState<ColorScheme>(
     localColorScheme ?? 'light'
@@ -27,6 +27,8 @@ function App() {
 
     if (!decodedToken) {
       handleLogout();
+    } else {
+      setIsAuth(true);
     }
   }, [isAuth]);
 

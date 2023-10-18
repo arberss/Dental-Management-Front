@@ -10,7 +10,7 @@ import { IconReportMedical } from '@tabler/icons-react';
 import Card from '@/components/Card/Card';
 import { IPagination } from '@/components/Pagination/Pagination.interface';
 import { IDoctor } from './doctors.interface';
-import { columns } from './helper';
+import { columns } from './doctors.helper';
 import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import CreateUser from '@/components/CreateUser/CreateUser';
 import { useQueryClient } from 'react-query';
@@ -112,12 +112,21 @@ const Doctors = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center'>
+          <Flex justify='space-between' align='center' gap="md">
             <Input
               name='doctorSearch'
               value={searchDoctor}
               onChange={handleSearchDoctor}
               placeholder='Search'
+              sx={{
+                width: '100%',
+              }}
+              styles={{
+                input: {
+                  maxWidth: '250px',
+                  width: '100%',
+                },
+              }}
             />
             <TableTopActions
               title='Add Doctor'

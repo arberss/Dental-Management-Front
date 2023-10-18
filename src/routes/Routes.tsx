@@ -1,14 +1,10 @@
 import VerifyUser from '@/components/CreateUser/VerifyUser/VerifyUser';
 import Login from '@/pages/Auth/Login/Login';
 import Dashboard from '@/pages/Dashboard/Dashboard';
-import Doctors from '@/pages/Doctors/Doctors';
-import Patient from '@/pages/Patient/Patient';
-import Patients from '@/pages/Patients/Patients';
-import Schedule from '@/pages/Schedule/Schedule';
-import Treatments from '@/pages/Treatments/Treatments';
 import { decodeToken } from '@/utils/decodeToken';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
+import { routes } from './routes.helper';
 
 const RoutesComponent = () => {
   const decodedToken: { [key: string]: any } | null = decodeToken();
@@ -23,11 +19,15 @@ const RoutesComponent = () => {
           </ProtectedRoute>
         }
       >
-        <Route path='patients' element={<Patients />} />
-        <Route path='patients/patient/:patientId' element={<Patient />} />
-        <Route path='treatments' element={<Treatments />} />
-        <Route path='doctors' element={<Doctors />} />
-        <Route path='schedules' element={<Schedule />} />
+        {routes.map((route) => {
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={<route.component />}
+            />
+          );
+        })}
       </Route>
 
       {!decodedToken && (

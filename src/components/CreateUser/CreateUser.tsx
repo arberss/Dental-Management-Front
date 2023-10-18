@@ -5,24 +5,20 @@ import { Box, Button, Drawer, Flex, Grid, MultiSelect } from '@mantine/core';
 import { useFormik } from 'formik';
 import { ChangeEvent } from 'react';
 import { ICreateUser } from './createUser.interface';
-import { validationSchema } from './helper';
+import { validationSchema } from './createuser.helper';
 
-interface CreateUserProps<T = { [key: string]: any }> {
+interface CreateUserProps {
   opened: boolean;
   onClose: () => void;
   title: string;
-  selectedData?: T | null;
   onCreateInvalidateQueries?: () => void;
-  onUpdateInvalidateQueries?: () => void;
 }
 
 const CreateUser = ({
   opened,
   onClose,
   title,
-  selectedData,
   onCreateInvalidateQueries,
-  onUpdateInvalidateQueries,
 }: CreateUserProps) => {
   const postMutation = usePostMutation<ICreateUser>(endpoints.registerUser);
 

@@ -17,4 +17,5 @@ export const endpoints = {
   getSchedulers: '/schedulers/all',
   addScheduler: '/schedulers/add',
   updateScheduler: '/schedulers/update',
+  me: '/user/me',
 };

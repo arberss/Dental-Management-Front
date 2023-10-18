@@ -6,7 +6,7 @@ import { endpoints } from '@/config/endpoints';
 import { usePagination } from '@/hooks/react-query/usePagination';
 import RightContent from '@/shared-components/Layouts/RightContent/RightContent';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { columns } from './helper';
+import { columns } from './createPatient.helper';
 import { IconUsers } from '@tabler/icons-react';
 import { Flex } from '@mantine/core';
 import { useQuery } from '@/hooks/react-query/useQuery';
@@ -135,12 +135,21 @@ const Patients = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center'>
+          <Flex justify='space-between' align='center' gap="md">
             <Input
               name='patientSearch'
               value={searchPatient}
               onChange={handleSearchPatient}
               placeholder='Search'
+              sx={{
+                width: '100%',
+              }}
+              styles={{
+                input: {
+                  maxWidth: '250px',
+                  width: '100%',
+                },
+              }}
             />
             <TableTopActions
               title='Add Patient'
