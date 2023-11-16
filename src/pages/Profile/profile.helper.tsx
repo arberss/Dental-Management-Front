@@ -18,10 +18,6 @@ export const cardsInfo = (data: User) => {
       value: data.email,
     },
     {
-      title: 'Patients',
-      value: data.patients.length,
-    },
-    {
       title: data.roles.length > 1 ? 'Roles' : 'Role',
       value: roles,
     },
