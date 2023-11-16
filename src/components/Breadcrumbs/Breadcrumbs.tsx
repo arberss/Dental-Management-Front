@@ -18,14 +18,21 @@ const Breadcrumbs = ({
       <Text
         key={item.title}
         onClick={() => (item?.onClick ? item.onClick() : null)}
-        sx={(theme) => ({
-          cursor: item?.onClick ? 'pointer' : 'default',
-          color:
-            theme.colorScheme === 'dark'
-              ? theme.colors.gray[1]
-              : theme.colors.gray[8],
-          ...textSx,
-        })}
+        sx={(theme) => {
+          let itemColor = theme.colors.blue[5];
+          if (!item?.onClick) {
+            itemColor =
+              theme.colorScheme === 'dark'
+                ? theme.colors.gray[1]
+                : theme.colors.gray[8];
+          }
+
+          return {
+            cursor: item?.onClick ? 'pointer' : 'default',
+            color: itemColor,
+            ...textSx,
+          };
+        }}
       >
         {item.title}
       </Text>
@@ -37,6 +44,7 @@ const Breadcrumbs = ({
       separator={seperator}
       sx={{
         margin: '15px 0',
+        cursor: 'default',
         ...sx,
       }}
     >
