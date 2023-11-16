@@ -19,14 +19,6 @@ export const columns = [
   {
     key: 'patients',
     name: 'Patients',
-    renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {
-      return (
-        <TableSelectedColumn
-          value={row?.patients?.length}
-          uniqueKey='createdAt'
-        />
-      );
-    },
   },
   {
     key: 'treatments',
