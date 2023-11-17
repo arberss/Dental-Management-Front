@@ -15,6 +15,7 @@ import TableTopActions from '@/components/TableTopActions/TableTopActions';
 import CreateUser from '@/components/CreateUser/CreateUser';
 import { useQueryClient } from 'react-query';
 import toast from '@/shared-components/toast/Toast';
+import useDebounce from '@/hooks/custom/useDebounce';
 
 const Doctors = () => {
   const queryClient = useQueryClient();
@@ -28,13 +29,15 @@ const Doctors = () => {
   });
   const [searchDoctor, setSearchDoctor] = useState('');
 
+  const debouncedSearch = useDebounce(searchDoctor, 500);
+
   const { data, isLoading, isSuccess } = usePagination<{
     items: IDoctor[];
     pageInfo: IPagination;
   }>(endpoints.doctors, {
     page: paginations.page,
     size: paginations.size,
-    search: searchDoctor,
+    search: debouncedSearch,
   });
 
   useEffect(() => {
@@ -112,7 +115,7 @@ const Doctors = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center' gap="md">
+          <Flex justify='space-between' align='center' gap='md'>
             <Input
               name='doctorSearch'
               value={searchDoctor}
