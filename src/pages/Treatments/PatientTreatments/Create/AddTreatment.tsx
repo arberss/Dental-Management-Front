@@ -23,7 +23,7 @@ interface AddPatientProps {
   opened: boolean;
   onClose: () => void;
   title: string;
-  selectedData?: Treatment | null;
+  selectedData?: (Treatment & { viewMode?: boolean }) | null;
   onCreateInvalidateQueries?: () => void;
   onUpdateInvalidateQueries?: () => void;
 }
@@ -38,6 +38,7 @@ const AddTreatment = ({
 }: AddPatientProps) => {
   const params: Readonly<{ patientId?: string }> = useParams();
   const editMode = !!selectedData;
+  const viewMode = selectedData?.viewMode;
 
   const [search, setSearch] = useState('');
 
@@ -136,6 +137,7 @@ const AddTreatment = ({
                   }
                   value={values.name}
                   error={errors.name}
+                  disabled={viewMode}
                 />
               </Grid.Col>
             </Grid>
@@ -150,6 +152,7 @@ const AddTreatment = ({
                   minRows={4}
                   value={values.description}
                   error={errors.description}
+                  disabled={viewMode}
                 />
               </Grid.Col>
             </Grid>
@@ -161,6 +164,7 @@ const AddTreatment = ({
                   onChange={(value: number) => setFieldValue('price', value)}
                   value={values.price}
                   error={errors.price}
+                  disabled={viewMode}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
@@ -174,6 +178,7 @@ const AddTreatment = ({
                   dropdownPosition='bottom'
                   error={errors?.doctor}
                   filter={onDoctorFilter}
+                  disabled={viewMode}
                 />
               </Grid.Col>
             </Grid>
@@ -190,14 +195,16 @@ const AddTreatment = ({
             >
               Cancel
             </Button>
-            <Button
-              bg='blue.8'
-              type='submit'
-              disabled={putMutation.isLoading || putMutationUpdate.isLoading}
-              loading={putMutation.isLoading || putMutationUpdate.isLoading}
-            >
-              {editMode ? 'Edit' : 'Create'}
-            </Button>
+            {opened && !viewMode && (
+              <Button
+                bg='blue.8'
+                type='submit'
+                disabled={putMutation.isLoading || putMutationUpdate.isLoading}
+                loading={putMutation.isLoading || putMutationUpdate.isLoading}
+              >
+                {editMode ? 'Edit' : 'Create'}
+              </Button>
+            )}
           </Flex>
         </form>
       </Flex>

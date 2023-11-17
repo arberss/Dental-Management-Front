@@ -15,6 +15,7 @@ interface InputProps {
   type?: string;
   sx?: Sx;
   styles?: Styles<TextInputStylesNames, Record<string, any>>;
+  disabled?: boolean;
 }
 
 const Input = (props: InputProps) => {
@@ -31,6 +32,7 @@ const Input = (props: InputProps) => {
     defaultValue,
     sx,
     styles,
+    disabled
   } = props;
 
   return (
@@ -47,6 +49,7 @@ const Input = (props: InputProps) => {
       type={type}
       sx={sx}
       styles={styles}
+      disabled={disabled}
     />
   );
 };

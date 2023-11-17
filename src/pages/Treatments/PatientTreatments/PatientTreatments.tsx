@@ -110,6 +110,23 @@ const Treatments = () => {
 
   const tableActions = [
     ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'view',
+      text: 'View',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.green[4],
+        color: theme.colors.dark[8],
+      }),
+      action: (): void => {
+        setSelectedTreatment(
+          ({
+            ...rowData,
+            doctor: rowData?.doctor?._id,
+            viewMode: true,
+          } as Treatment & { viewMode: boolean }) ?? null
+        );
+      },
+    }),
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
       type: 'edit',
       text: 'Edit',
       sx: (theme) => ({

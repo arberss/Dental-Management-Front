@@ -17,6 +17,7 @@ interface InputProps {
   type?: 'number' | 'text';
   precision?: number;
   removeTrailingZeros?: boolean;
+  disabled?: boolean;
 }
 
 const NumberInput = (props: InputProps) => {
@@ -33,6 +34,7 @@ const NumberInput = (props: InputProps) => {
     value,
     defaultValue,
     formatter,
+    disabled,
     type = 'number',
     precision = 0,
     removeTrailingZeros = true,
@@ -55,6 +57,7 @@ const NumberInput = (props: InputProps) => {
       precision={precision}
       formatter={formatter}
       removeTrailingZeros={removeTrailingZeros}
+      disabled={disabled}
     />
   );
 };

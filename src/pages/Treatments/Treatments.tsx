@@ -19,6 +19,7 @@ import AddTreatment from './PatientTreatments/Create/AddTreatment';
 import AuthContext from '@/context/authContext';
 import TreatmentInvoice from '@/components/TreatmentInvoice/TreatmentInvoice';
 import { IPatient } from '../Patient/patient.interface';
+import useDebounce from '@/hooks/custom/useDebounce';
 
 interface InvoiceData {
   patient: IPatient;
@@ -46,13 +47,15 @@ const Treatments = () => {
   );
   const [openInvoiceModal, setOpenInvoiceModal] = useState<boolean>(false);
 
+  const debouncedSearch = useDebounce(searchTreatment, 500);
+
   const { data, isLoading, isSuccess } = usePagination<{
     items: Treatment[];
     pageInfo: IPagination;
   }>(endpoints.treatments, {
     page: paginations.page,
     size: paginations.size,
-    search: searchTreatment,
+    search: debouncedSearch,
   });
 
   const deleteMutation = useDeleteMutation(
@@ -97,6 +100,23 @@ const Treatments = () => {
   };
 
   const tableActions = [
+    ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
+      type: 'view',
+      text: 'View',
+      sx: (theme) => ({
+        backgroundColor: theme.colors.green[4],
+        color: theme.colors.dark[8],
+      }),
+      action: (): void => {
+        setSelectedTreatment(
+          ({
+            ...rowData,
+            doctor: rowData?.doctor?._id,
+            viewMode: true,
+          } as Treatment & { viewMode: boolean }) ?? null
+        );
+      },
+    }),
     ({ rowData }: { rowData?: { [key: string]: any } }): Actions => ({
       type: 'edit',
       text: 'Edit',

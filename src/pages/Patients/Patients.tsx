@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { IPatient } from '../Patient/patient.interface';
 import { Actions } from '@/components/Table/actions/TableActions';
 import { IPagination } from '@/components/Pagination/Pagination.interface';
+import useDebounce from '@/hooks/custom/useDebounce';
 
 const Patients = () => {
   const navigate = useNavigate();
@@ -31,13 +32,15 @@ const Patients = () => {
     [key: string]: any;
   } | null>(null);
 
+  const debouncedSearch = useDebounce(searchPatient, 500);
+
   const { data, isLoading, isSuccess } = usePagination<{
     items: IPatient[];
     pageInfo: IPagination;
   }>(endpoints.patients, {
     page: paginations.page,
     size: paginations.size,
-    search: searchPatient,
+    search: debouncedSearch,
   });
 
   const {
@@ -135,7 +138,7 @@ const Patients = () => {
               );
             })}
           </Flex>
-          <Flex justify='space-between' align='center' gap="md">
+          <Flex justify='space-between' align='center' gap='md'>
             <Input
               name='patientSearch'
               value={searchPatient}
