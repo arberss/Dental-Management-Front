@@ -54,7 +54,7 @@ const Doctors = () => {
     actionColumn: {
       frozen: true,
       position: 'left',
-      width: 150,
+      width: 100,
     },
     pagination: {
       activePage: paginations.page,
@@ -140,7 +140,6 @@ const Doctors = () => {
             columns={columns}
             rows={data?.items ?? []}
             options={tableOptions}
-            // actions={tableActions}
           />
         </>
       </RightContent>

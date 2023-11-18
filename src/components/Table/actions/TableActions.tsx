@@ -14,10 +14,11 @@ export interface Actions {
 export type Props<T = any> = {
   rowData?: T;
   actions: (({ rowData }: { rowData?: T }) => Actions)[];
+  setOpened?: (value: boolean) => void;
 };
 
 const ColumnActions = <T extends unknown>(props: Props<T>): JSX.Element => {
-  const { rowData, actions } = props;
+  const { rowData, actions, setOpened } = props;
 
   const renderActions = (): (JSX.Element | null)[] =>
     actions?.map(
@@ -33,9 +34,10 @@ const ColumnActions = <T extends unknown>(props: Props<T>): JSX.Element => {
           <Button
             disabled={element?.disabled}
             key={`${element?.type}-${index}`}
-            onClick={(): void | null =>
-              element?.action ? element?.action() : null
-            }
+            onClick={(): void | null => {
+              setOpened?.(false);
+              return element?.action ? element?.action() : null;
+            }}
             compact
             variant='white'
             sx={element?.sx}

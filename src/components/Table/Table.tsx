@@ -3,7 +3,8 @@ import { Text, useMantineColorScheme } from '@mantine/core';
 import DataGrid from 'react-data-grid';
 import 'react-data-grid/lib/styles.css';
 import Pagination from '../Pagination/Pagination';
-import ColumnActions, { Actions } from './actions/TableActions';
+import ActionData from './actions/ActionData';
+import { Actions } from './actions/TableActions';
 import TableHeader from './components/TableHeader/TableHeader';
 import './table.scss';
 
@@ -72,9 +73,7 @@ const Table = ({
         cellWrap: options?.actionColumn?.cellWrap,
         headerRenderer: ({ column }: { column: columnRowType }) => column?.name,
         renderCell: ({ row }: { row: any }): JSX.Element => (
-          <div className='tableGrid__actions'>
-            <ColumnActions rowData={row} actions={actions} />
-          </div>
+          <ActionData rowData={row} actions={actions} />
         ),
       },
     ];

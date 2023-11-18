@@ -18,7 +18,13 @@ interface StatsResponse {
 }
 
 const Stats = () => {
-  const { data, isLoading } = useQuery<StatsResponse>(endpoints.allStats);
+  const { data, isLoading } = useQuery<StatsResponse>(
+    endpoints.allStats,
+    {},
+    {
+      staleTime: 0,
+    }
+  );
 
   if (isLoading) return <Loader />;
 
