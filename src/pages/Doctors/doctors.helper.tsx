@@ -33,7 +33,7 @@ export const columns = [
   },
   {
     key: 'createdAt',
-    name: 'Date',
+    name: 'Registered Date',
     renderCell: ({ row }: { column: columnRowType; row: columnRowType }) => {
       return (
         <TableSelectedColumn

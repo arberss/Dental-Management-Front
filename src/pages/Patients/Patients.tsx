@@ -67,7 +67,7 @@ const Patients = () => {
     actionColumn: {
       frozen: true,
       position: 'left',
-      width: 150,
+      width: 100,
     },
     pagination: {
       activePage: paginations.page,

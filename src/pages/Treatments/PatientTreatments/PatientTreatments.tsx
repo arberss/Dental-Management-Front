@@ -94,6 +94,7 @@ const Treatments = () => {
     actionColumn: {
       frozen: true,
       position: 'left',
+      width: 100,
     },
     pagination: {
       activePage: paginations.page,

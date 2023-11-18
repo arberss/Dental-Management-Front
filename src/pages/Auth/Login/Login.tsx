@@ -45,6 +45,7 @@ const Login = () => {
             navigate('/');
           },
           onError: (error) => {
+            console.log('🚀 ~ file: Login.tsx:48 ~ error:', error);
             toast({ status: 'error', title: error?.response?.data?.message });
           },
         });
@@ -56,34 +57,28 @@ const Login = () => {
 
   return (
     <AuthLayout title='Login'>
-      <>
-        <form onSubmit={formik.handleSubmit}>
-          <Flex gap='md' direction='column'>
-            <Input
-              name='email'
-              label='Email'
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              error={formik.errors.email}
-            />
-            <PasswordInput
-              name='password'
-              label='Password'
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              error={formik.errors.password}
-              visibilityToggleIcon={({ reveal, size }) =>
-                reveal ? (
-                  <IconEyeOff size={size} />
-                ) : (
-                  <IconEyeCheck size={size} />
-                )
-              }
-            />
-            <Button type='submit'>Login</Button>
-          </Flex>
-        </form>
-      </>
+      <form onSubmit={formik.handleSubmit}>
+        <Flex gap='md' direction='column'>
+          <Input
+            name='email'
+            label='Email'
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            error={formik.errors.email}
+          />
+          <PasswordInput
+            name='password'
+            label='Password'
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            error={formik.errors.password}
+            visibilityToggleIcon={({ reveal, size }) =>
+              reveal ? <IconEyeOff size={size} /> : <IconEyeCheck size={size} />
+            }
+          />
+          <Button type='submit'>Login</Button>
+        </Flex>
+      </form>
     </AuthLayout>
   );
 };
