@@ -13,6 +13,7 @@ import {
   Grid,
   SelectItem,
   Text,
+  Textarea,
 } from '@mantine/core';
 import { DatePickerInput, DateValue } from '@mantine/dates';
 import dayjs from 'dayjs';
@@ -122,6 +123,9 @@ const AddPatient = ({
             }}
             className='overflowHoverVisibility'
           >
+            <Text size='md' pt='md' weight='bold' color='blue.5'>
+              Personal
+            </Text>
             <Grid gutter='sm' py='4px'>
               <Grid.Col span={6}>
                 <Input
@@ -244,7 +248,7 @@ const AddPatient = ({
                   Treatment
                 </Text>
                 <Grid gutter='sm' py='4px'>
-                  <Grid.Col span={6}>
+                  <Grid.Col span={12}>
                     <Input
                       name='treatment.name'
                       label='Treatment name'
@@ -255,13 +259,14 @@ const AddPatient = ({
                       error={errors?.treatment?.name}
                     />
                   </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Input
+                  <Grid.Col span={12}>
+                    <Textarea
                       name='treatment.description'
                       label='Description'
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                         setFieldValue('treatment.description', e.target.value)
                       }
+                      minRows={4}
                       value={values?.treatment?.description}
                       error={errors?.treatment?.description}
                     />

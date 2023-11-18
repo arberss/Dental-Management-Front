@@ -4,6 +4,7 @@ import {
   IconReportMedical,
   IconUser,
   IconCalendar,
+  IconFileAnalytics,
 } from '@tabler/icons-react';
 
 export interface LinkDataProps {
@@ -31,17 +32,24 @@ export const linkData: LinkDataProps[] = [
     roles: ['admin', 'doctor'],
   },
   {
-    icon: <IconUser size={20} />,
+    icon: <IconUser size={20} color='green' />,
     color: 'blue',
     label: 'Doctors',
     to: '/doctors',
     roles: ['admin'],
   },
   {
-    icon: <IconCalendar size={20} />,
+    icon: <IconCalendar size={20} color='#979e49' />,
     color: 'blue',
     label: 'Schedules',
     to: '/schedules',
+    roles: ['admin', 'doctor'],
+  },
+  {
+    icon: <IconFileAnalytics size={20} color='#f57242' />,
+    color: 'blue',
+    label: 'Statistics',
+    to: '/statistics',
     roles: ['admin', 'doctor'],
   },
 ];

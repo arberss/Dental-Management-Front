@@ -18,4 +18,5 @@ export const endpoints = {
   addScheduler: '/schedulers/add',
   updateScheduler: '/schedulers/update',
   me: '/user/me',
+  allStats: '/patient/allStats',
 };

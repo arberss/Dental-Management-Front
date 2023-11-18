@@ -1,7 +1,7 @@
 import { Box, Card as CardMantine, Flex, Text } from '@mantine/core';
 
 interface CardProps {
-  icon: JSX.Element;
+  icon?: JSX.Element;
   title: string;
   value: string | number;
 }
