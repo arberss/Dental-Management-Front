@@ -3,6 +3,7 @@ import Patient from '@/pages/Patient/Patient';
 import Patients from '@/pages/Patients/Patients';
 import Profile from '@/pages/Profile/Profile';
 import Schedule from '@/pages/Schedule/Schedule';
+import Stats from '@/pages/Stats/Stats';
 import Treatments from '@/pages/Treatments/Treatments';
 
 export const routes = [
@@ -16,4 +17,5 @@ export const routes = [
   { path: '/doctors', component: Doctors, roles: ['admin'] },
   { path: '/schedules', component: Schedule, roles: ['admin', 'doctor'] },
   { path: '/profile', component: Profile, roles: ['admin', 'doctor'] },
+  { path: '/statistics', component: Stats, roles: ['admin', 'doctor'] },
 ];
